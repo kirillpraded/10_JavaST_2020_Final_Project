@@ -1,72 +1,78 @@
-/* 
-Tables may change
-due to incomplete knowlege 
-about saving images in
-web-applications and 
-possible additions to the project
-*/
-CREATE TABLE `user` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `username` VARCHAR(255) NOT NULL UNIQUE,
-    `password` CHAR(32) NOT NULL,
-    `first_name` VARCHAR(50) NOT NULL,
-    `last_name` VARCHAR(50) NOT NULL,
-    `email` VARCHAR(50) NOT NULL,
-    `reg_date` DATETIME NOT NULL DEFAULT NOW(),
+
+CREATE TABLE `user`
+(
+    `id`            BIGINT       NOT NULL AUTO_INCREMENT,
+    `username`      VARCHAR(255) NOT NULL UNIQUE,
+    `password`      CHAR(32)     NOT NULL,
+    `first_name`    VARCHAR(50)  NOT NULL,
+    `last_name`     VARCHAR(50)  NOT NULL,
+    `email`         VARCHAR(50)  NOT NULL,
+    /*
+      0 - ADMINISTRATOR,
+      1 - MODERATOR,
+      2 - WRITER,
+      3 - READER.
+     */
+    `role`          TINYINT      NOT NULL CHECK (`role` IN (0, 1, 2, 3)),
+    `profile_image` VARCHAR(255) NOT NULL DEFAULT "default_user",
+    `reg_date`      TIMESTAMP     NOT NULL DEFAULT NOW(),
     CONSTRAINT `PK_user` PRIMARY KEY (`id`)
-) ENGINE=INNODB DEFAULT CHARACTER SET utf8;
+);
 
-CREATE TABLE `role` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `role_name` VARCHAR(50) NOT NULL,
-    CONSTRAINT `PK_role` PRIMARY KEY (`id`)
-) ENGINE=INNODB DEFAULT CHARACTER SET utf8;
+CREATE TABLE `category`
+(
+    `id`        BIGINT      NOT NULL AUTO_INCREMENT,
+    `parent_id` BIGINT, #fk дает ли fk возможность добавлять null
+    `name`      VARCHAR(50) NOT NULL,
+    CONSTRAINT `PK_category` PRIMARY KEY (`id`),
+    CONSTRAINT `FK_category` FOREIGN KEY (`parent_id`) REFERENCES `category` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+);
 
-CREATE TABLE `user_role` (
-	`user_id` INTEGER NOT NULL,
-	`role_id` INTEGER NOT NULL,
-    CONSTRAINT `FK_user_role` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_role_user` FOREIGN KEY (`role_id`) REFERENCES `role`(`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=INNODB DEFAULT CHARACTER SET utf8;
-
-CREATE TABLE `category` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(50) NOT NULL,
-    CONSTRAINT `PK_category` PRIMARY KEY (`id`)
-) ENGINE=INNODB DEFAULT CHARACTER SET utf8;
-
-CREATE TABLE `question` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `title` VARCHAR(50) NOT NULL,
-    `text` VARCHAR(500) NOT NULL,
-    `category_id` INTEGER NOT NULL,
-    `user_id` INTEGER NOT NULL,
-    `ask_date` DATETIME NOT NULL DEFAULT NOW(),
-
+CREATE TABLE `question`
+(
+    `id`                      BIGINT       NOT NULL AUTO_INCREMENT,
+    `title`                   VARCHAR(50)  NOT NULL,
+    `text`                    VARCHAR(500) NOT NULL,
+    `category_id`             BIGINT       NOT NULL,
+    `user_id`                 BIGINT       NOT NULL,
+    `ask_date`                TIMESTAMP    NOT NULL DEFAULT NOW(),
+    `question_image`          VARCHAR(255),
+    `is_closed`               TINYINT(1)   NOT NULL DEFAULT 0 CHECK (`is_closed` IN (0, 1)),
+    `contains_correct_answer` TINYINT(1)   NOT NULL DEFAULT 0 CHECK (`contains_correct_answer` IN (0, 1)),
     CONSTRAINT `PK_question` PRIMARY KEY (`id`),
-    CONSTRAINT `FK_question_category` FOREIGN KEY (`category_id`) REFERENCES `category`(`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT `FK_question_user` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=INNODB DEFAULT CHARACTER SET utf8;
+    CONSTRAINT `FK_question_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT `FK_question_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+);
 
-CREATE TABLE `answer` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `text` VARCHAR(500) NOT NULL,
-    `user_id` INTEGER NOT NULL,
-    `answer_date` DATETIME NOT NULL DEFAULT NOW(),
+CREATE TABLE `answer`
+(
+    `id`          BIGINT       NOT NULL AUTO_INCREMENT,
+    `text`        VARCHAR(500) NOT NULL,
+    `user_id`     BIGINT       NOT NULL,
+    `question_id` BIGINT       NOT NULL,
+    `answer_date` TIMESTAMP    NOT NULL DEFAULT NOW(),
+    `is_correct`  TINYINT(1)   NOT NULL DEFAULT 0 CHECK (`is_correct` IN (0, 1)),
     CONSTRAINT `PK_answer` PRIMARY KEY (`id`),
-    CONSTRAINT `FK_answer_user` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=INNODB DEFAULT CHARACTER SET utf8;
+    CONSTRAINT `FK_answer_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT `FK_answer_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+);
 
-CREATE TABLE `question_answer` (
-	`question_id` INTEGER NOT NULL,
-	`answer_id` INTEGER NOT NULL,
-    CONSTRAINT `FK_question_answer` FOREIGN KEY (`question_id`) REFERENCES `question`(`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_answer_question` FOREIGN KEY (`answer_id`) REFERENCES `answer`(`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=INNODB DEFAULT CHARACTER SET utf8;
+CREATE TABLE `tag`
+(
+    `id`   BIGINT      NOT NULL AUTO_INCREMENT,
+    `text` VARCHAR(32) NOT NULL UNIQUE,
+    CONSTRAINT `PK_tag` PRIMARY KEY (`id`)
+);
 
-CREATE TABLE `image_user` (
-	`filename` VARCHAR(255) DEFAULT "default_user",
-	`user_id` INTEGER NOT NULL UNIQUE,
-    CONSTRAINT `PK_image` PRIMARY KEY (`filename`),
-	CONSTRAINT `FK_user_image` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=INNODB DEFAULT CHARACTER SET utf8;
+
+CREATE TABLE `question_tag`
+(
+    `question_id` BIGINT NOT NULL,
+    `tag_id`      BIGINT NOT NULL,
+    CONSTRAINT `FK_question_tag` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT `FK_tag_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT `UQ_qid_tid` UNIQUE (`question_id`, `tag_id`)
+);
+
+
+
