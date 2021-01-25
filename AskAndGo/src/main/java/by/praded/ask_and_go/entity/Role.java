@@ -3,13 +3,14 @@ package by.praded.ask_and_go.entity;
 /**
  * @author Kiryl Praded
  * 04.12.2020
- * Possible user roles.
+ * <p>
+ * Enumeration of possible user roles.
  */
 public enum Role {
     ADMIN("Administrator"), MODERATOR("Moderator"), WRITER("Writer"), READER("Reader");
 
     /**
-     * Name of the role
+     * Name of the role.
      */
     private final String name;
 
@@ -32,9 +33,9 @@ public enum Role {
     }
 
     /**
-     * Getter for the field {@link Role#name}.
+     * Method to get value of the field {@link Role#name}.
      *
-     * @return string value of the role
+     * @return string value of the role.
      */
     public String getName() {
         return name;
