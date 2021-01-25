@@ -1,7 +1,6 @@
 package by.praded.ask_and_go.dao.pool;
 
-import by.praded.ask_and_go.exception.ConnectionPoolException;
-import by.praded.ask_and_go.service.util.ResourceManager;
+import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,8 +9,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -24,78 +23,61 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectionPool {
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
     private static ConnectionPool instance;
-    private final String driver;
-    private final String url;
-    private final String login;
-    private final String password;
-    private final Lock lock;
+    private String url;
+    private String login;
+    private String password;
+    private Lock lock;
     private BlockingQueue<WrappedConnection> freeConnections;
     private Set<WrappedConnection> takenConnections;
     private int poolSize;
 
-    private ConnectionPool() throws ConnectionPoolException {
-        ResourceManager resourceManager = ResourceManager.getInstance();
-        this.driver = resourceManager.findConfigurationValue("database.driver");
-        this.url = resourceManager.findConfigurationValue("database.url");
-        this.login = resourceManager.findConfigurationValue("database.user");
-        this.password = resourceManager.findConfigurationValue("database.password");
-        this.lock = new ReentrantLock();
-
-        try {
-            this.poolSize = Integer.parseInt(resourceManager.findConfigurationValue("database.poolSize"));
-        } catch (NumberFormatException e) {
-            poolSize = 100;
-            logger.error("Failed to parse pool size, pool size has been set to {}", poolSize, e);
-        }
-        initializePool();
-        logger.info("Connection pool initialized");
+    private ConnectionPool() {
+        lock = new ReentrantLock();
     }
 
 
-    public static ConnectionPool getInstance() throws ConnectionPoolException {
+    public static ConnectionPool getInstance() {
         if (instance == null) {
             instance = new ConnectionPool();
         }
         return instance;
     }
 
-    public void initializePool() throws ConnectionPoolException {
+    public void init(String driverClass, String url, String user,
+                     String password, int poolSize) throws ConnectionPoolException {
         try {
-            Class.forName(driver);
-            freeConnections = new ArrayBlockingQueue<>(poolSize);
-            takenConnections = new HashSet<>(poolSize);
-            /*
-            for (int i = 0; i < poolSize; i++) {
-                freeConnections.add(new WrappedConnection(DriverManager.getConnection(url, login, password)));
-            }
-             */
+            Class.forName(driverClass);
+            this.url = url;
+            this.login = user;
+            this.password = password;
+            this.poolSize = poolSize;
+            freeConnections = new LinkedBlockingQueue<>();
+            takenConnections = new HashSet<>();
         } catch (ClassNotFoundException e) {
-            logger.error("Connection pool initialization failed.", e);
+            logger.fatal("Connection pool initialization failed.", e);
             throw new ConnectionPoolException(e.getMessage(), e);
         }
     }
 
-    //TODO нужно синхронизировать или нет
-    public Connection takeConnection() throws ConnectionPoolException { // WrappedConnection implements Connection поэтому можно отсюда возвращать обычный Connection
+
+    public Connection takeConnection() throws ConnectionPoolException {
+        lock.lock();
         WrappedConnection connection;
         try {
-            lock.lock();
-            if (freeConnections.isEmpty()) {
-                if (takenConnections.size() < poolSize) {
-                    connection = new WrappedConnection(DriverManager.getConnection(url, login, password));
-                } else {
-                    connection = freeConnections.take();
-                }
+            //todo уточнить возможна ли тут рассинхронизация
+            if(!freeConnections.isEmpty()) {
+                connection = freeConnections.take();
+            } else if(takenConnections.size() < poolSize) {
+                connection = new WrappedConnection(DriverManager.getConnection(url, login, password));
             } else {
                 connection = freeConnections.take();
             }
             takenConnections.add(connection);
             lock.unlock();
         } catch (InterruptedException | SQLException e) {
-            lock.unlock();
             logger.error("Failed to take connection from queue.", e);
+            lock.unlock();
             Thread.currentThread().interrupt();
-
             /*
             InterruptedExceptions should either be rethrown - immediately or after cleaning up the method's state
              - or the thread should be re-interrupted by calling Thread.interrupt() even if this is supposed to be a single-threaded application.
@@ -103,11 +85,13 @@ public class ConnectionPool {
              */
             throw new ConnectionPoolException(e.getMessage(), e);
         }
+        logger.info("Connection taken");
         return connection;
     }
 
     public void destroyPool() throws ConnectionPoolException { // уничтожение пула
         clearConnectionQueue();
+        logger.info("Pool destroyed.");
     }
 
     private void clearConnectionQueue() throws ConnectionPoolException {
@@ -129,29 +113,6 @@ public class ConnectionPool {
         }
     }
 
-    void freeConnection(WrappedConnection connection) {
-        //if (connection.isClosed()) {
-        //    throw new SQLException("Attempting to close a closed connection");
-        //}
-        //if (connection.isReadOnly()) {
-        //    connection.setReadOnly(false);
-        //}
-        //if (!connection.getAutoCommit()) {
-        //    connection.setAutoCommit(true);
-        //}
-        try {
-            connection.clearWarnings();
-            connection.setAutoCommit(true);
-            takenConnections.remove(connection);
-            freeConnections.offer(connection);
-        } catch (SQLException e) {
-            //todo logger
-            e.printStackTrace();
-        }
-
-
-    }
-
     private void closeFreeConnections(BlockingQueue<WrappedConnection> queue) throws SQLException {
         WrappedConnection connection;
 
@@ -163,57 +124,19 @@ public class ConnectionPool {
         }
     }
 
-    /*
-    метод закрытия, чтобы постоянно в коде не писать try-catch-finally при закрытии конекшена из пулла - если там wrappedConnection то конекшен
-    вернется в пул и при этом закроется statement и resultSet
-     */
-    /*
-    public void closeConnection(Connection connection, Statement statement, ResultSet resultSet) {
+    void freeConnection(WrappedConnection connection) {
         try {
-            connection.close();
+            connection.clearWarnings();
+            connection.setAutoCommit(true);
+            takenConnections.remove(connection);
+            freeConnections.offer(connection);
+            logger.info("Connection returned.");
         } catch (SQLException e) {
-            logger.error("Failed to return connection to the pool.");
-            throw new ConnectionPoolException(e.getMessage(), e);
+            logger.error("Failed to return connection.", e);
         }
-        try {
-            resultSet.close();
-        } catch (SQLException e) {
-            logger.error("Failed to close resultSet.");
-            throw new ConnectionPoolException(e.getMessage(), e);
-        }
-        try {
-            statement.close();
-        } catch (SQLException e) {
-            logger.error("Failed to close statement", e);
-            throw new ConnectionPoolException(e.getMessage(), e);
-        }
-    }
 
-    // перегрузки для других ситуаций
-    public void closeConnection(Connection connection, Statement statement) {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            logger.error("Failed to return connection to the pool", e);
-            throw new ConnectionPoolException(e.getMessage(), e);
-        }
-        try {
-            statement.close();
-        } catch (SQLException e) {
-            logger.error("Failed to close statement", e);
-            throw new ConnectionPoolException(e.getMessage(), e);
-        }
-    }
 
-    public void closeConnection(Connection connection) {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            logger.error("Failed to return connection to the pool", e);
-            throw new ConnectionPoolException(e.getMessage(), e);
-        }
     }
 
 
-     */
 }

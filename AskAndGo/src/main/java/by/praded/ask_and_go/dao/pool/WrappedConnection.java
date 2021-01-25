@@ -1,6 +1,5 @@
 package by.praded.ask_and_go.dao.pool;
 
-import by.praded.ask_and_go.exception.ConnectionPoolException;
 
 import java.sql.*;
 import java.util.Map;
@@ -12,14 +11,14 @@ import java.util.concurrent.Executor;
  * 04.12.2020
  */
 public class WrappedConnection implements Connection {
-    private Connection connection;
+    private final Connection connection;
 
     public WrappedConnection(Connection connection) throws SQLException {
         this.connection = connection;
         this.connection.setAutoCommit(true);
     }
 
-    void completelyClose() throws SQLException { // по настоящему закрывает, работает как не переопределенный метод close() интерфейса Connection
+    void completelyClose() throws SQLException {
         connection.close();
     }
 
@@ -29,11 +28,7 @@ public class WrappedConnection implements Connection {
      */
     @Override
     public void close() {
-        try {
-            ConnectionPool.getInstance().freeConnection(this);
-        } catch (ConnectionPoolException e) {
-            e.printStackTrace();
-        }
+        ConnectionPool.getInstance().freeConnection(this);
     }
 
     @Override
@@ -57,13 +52,13 @@ public class WrappedConnection implements Connection {
     }
 
     @Override
-    public void setAutoCommit(boolean b) throws SQLException {
-        connection.setAutoCommit(b);
+    public boolean getAutoCommit() throws SQLException {
+        return connection.getAutoCommit();
     }
 
     @Override
-    public boolean getAutoCommit() throws SQLException {
-        return connection.getAutoCommit();
+    public void setAutoCommit(boolean b) throws SQLException {
+        connection.setAutoCommit(b);
     }
 
     @Override
@@ -88,18 +83,13 @@ public class WrappedConnection implements Connection {
     }
 
     @Override
-    public void setReadOnly(boolean b) throws SQLException {
-        connection.setReadOnly(b);
-    }
-
-    @Override
     public boolean isReadOnly() throws SQLException {
         return connection.isReadOnly();
     }
 
     @Override
-    public void setCatalog(String s) throws SQLException {
-        connection.setCatalog(s);
+    public void setReadOnly(boolean b) throws SQLException {
+        connection.setReadOnly(b);
     }
 
     @Override
@@ -108,13 +98,18 @@ public class WrappedConnection implements Connection {
     }
 
     @Override
-    public void setTransactionIsolation(int i) throws SQLException {
-        connection.setTransactionIsolation(i);
+    public void setCatalog(String s) throws SQLException {
+        connection.setCatalog(s);
     }
 
     @Override
     public int getTransactionIsolation() throws SQLException {
         return connection.getTransactionIsolation();
+    }
+
+    @Override
+    public void setTransactionIsolation(int i) throws SQLException {
+        connection.setTransactionIsolation(i);
     }
 
     @Override
@@ -153,13 +148,13 @@ public class WrappedConnection implements Connection {
     }
 
     @Override
-    public void setHoldability(int i) throws SQLException {
-        connection.setHoldability(i);
+    public int getHoldability() throws SQLException {
+        return connection.getHoldability();
     }
 
     @Override
-    public int getHoldability() throws SQLException {
-        return connection.getHoldability();
+    public void setHoldability(int i) throws SQLException {
+        connection.setHoldability(i);
     }
 
     @Override
@@ -243,11 +238,6 @@ public class WrappedConnection implements Connection {
     }
 
     @Override
-    public void setClientInfo(Properties properties) throws SQLClientInfoException {
-        connection.setClientInfo(properties);
-    }
-
-    @Override
     public String getClientInfo(String s) throws SQLException {
         return connection.getClientInfo(s);
     }
@@ -255,6 +245,11 @@ public class WrappedConnection implements Connection {
     @Override
     public Properties getClientInfo() throws SQLException {
         return connection.getClientInfo();
+    }
+
+    @Override
+    public void setClientInfo(Properties properties) throws SQLClientInfoException {
+        connection.setClientInfo(properties);
     }
 
     @Override
@@ -268,13 +263,13 @@ public class WrappedConnection implements Connection {
     }
 
     @Override
-    public void setSchema(String s) throws SQLException {
-        connection.setSchema(s);
+    public String getSchema() throws SQLException {
+        return connection.getSchema();
     }
 
     @Override
-    public String getSchema() throws SQLException {
-        return connection.getSchema();
+    public void setSchema(String s) throws SQLException {
+        connection.setSchema(s);
     }
 
     @Override
