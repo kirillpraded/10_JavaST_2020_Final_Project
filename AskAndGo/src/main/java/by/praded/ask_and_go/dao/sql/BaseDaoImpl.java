@@ -1,4 +1,4 @@
-package by.praded.ask_and_go.dao.impl;
+package by.praded.ask_and_go.dao.sql;
 
 import java.sql.Connection;
 
@@ -9,8 +9,16 @@ import java.sql.Connection;
  * Should be inherited by each DAO implementation.
  */
 abstract public class BaseDaoImpl {
+    /**
+     * Connection to connect with database.
+     */
     protected Connection connection;
 
+    /**
+     * Method to set value to the field {@link BaseDaoImpl#connection}.
+     *
+     * @param connection - connection to set.
+     */
     public void setConnection(Connection connection) {
         this.connection = connection;
     }

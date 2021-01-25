@@ -1,24 +1,50 @@
-package by.praded.ask_and_go.dao.impl;
+package by.praded.ask_and_go.dao.sql;
 
 import by.praded.ask_and_go.dao.AnswerDao;
+import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Answer;
 import by.praded.ask_and_go.entity.Question;
 import by.praded.ask_and_go.entity.User;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Kiryl Praded
  * 13.12.2020
+ * <p>
+ * Answer dao implementation for SQL.
+ * @see AnswerDao
+ * @see by.praded.ask_and_go.dao.Dao
+ * @see BaseDaoImpl
+ * @see Answer
  */
 public class AnswerDaoImpl extends BaseDaoImpl implements AnswerDao {
+
+    /**
+     * Dao class constructor to create dao only with connection.
+     *
+     * @param connection - for connecting with database.
+     */
+    public AnswerDaoImpl(Connection connection) {
+        this.connection = connection;
+    }
+
+    /**
+     * Method to create answer in the database.
+     *
+     * @param answer - answer to insert.
+     * @return generated identity of answer.
+     * @throws DaoException - exception may occurs during the insertion.
+     */
     @Override
-    public boolean create(Answer answer) {
+    public Long create(Answer answer) throws DaoException {
         String sql = "INSERT INTO `answer` (`text`, `user_id`, `question_id`) VALUE (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, answer.getText());
@@ -27,15 +53,25 @@ public class AnswerDaoImpl extends BaseDaoImpl implements AnswerDao {
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
-            return resultSet.next();
+            if (resultSet.next()) {
+                return resultSet.getLong(1);
+            } else {
+                throw new DaoException("There is no autoincremented indices after trying to add entry into the table `answer`");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException(e);
         }
-        return false;
     }
 
+    /**
+     * Method to read an answer from database.
+     *
+     * @param id - identity of the answer to read.
+     * @return answer that its found.
+     * @throws DaoException - exception may occurs during the reading.
+     */
     @Override
-    public Answer read(Long id) {
+    public Answer read(Long id) throws DaoException {
         String sql = "SELECT `text`, `user_id`, `question_id`, `answer_date`, `is_correct`" +
                 " FROM `answer` WHERE `id` = ?";
         Answer answer = null;
@@ -56,85 +92,66 @@ public class AnswerDaoImpl extends BaseDaoImpl implements AnswerDao {
                 answer.setCorrect(resultSet.getBoolean("is_correct"));
             }
         } catch (SQLException e) {
-            //TODO LOG EVENT
+            throw new DaoException(e);
         }
         return answer;
     }
 
+    /**
+     * Declaration of method that update an answer in the database.
+     *
+     * @param answer - answer to update
+     * @throws DaoException - exception may occurs during the updating.
+     */
     @Override
-    public boolean update(Answer answer) {
-        String sql = "UPDATE `answer` SET `text` = ?, `is_correct` = ? WHERE `id` = ?";
+    public void update(Answer answer) throws DaoException {
+        String sql = "UPDATE `answer` SET `text` = ? WHERE `id` = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, answer.getText());
-            if (answer.isCorrect()) {
-                statement.setInt(2, 1);
-            } else {
-                statement.setInt(2, 0);
-            }
-            statement.setLong(3, answer.getId());
-            if (statement.executeUpdate() != 0) {
-                return true;
-            }
-        } catch (SQLException | NullPointerException e) {
-            e.printStackTrace();
-            // TODO could be thrown to notify controller that update isn't completed o throw new PersistentException(e);
+            statement.setLong(2, answer.getId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException(e);
         }
-        return false;
     }
 
+    /**
+     * Method to delete an answer from database.
+     *
+     * @param id - identity of the answer to delete.
+     * @throws DaoException - exception may occurs during the deleting.
+     */
     @Override
-    public boolean delete(Long id) {
+    public void delete(Long id) throws DaoException {
         String sql = "DELETE FROM `answer` WHERE `id` = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, id);
-            if (statement.executeUpdate() != 0) {
-                return true;
-            }
+            statement.executeUpdate();
         } catch (SQLException e) {
-            // TODO could be thrown to notify controller that update isn't completed o throw new PersistentException(e);
+            throw new DaoException(e);
         }
-        return false;
     }
 
+    /**
+     * Method to find list of answers by the question identity.
+     *
+     * @param questionId - identity of the question
+     * @return list of answers found by the question id.
+     * @throws DaoException - may occurs during the reading.
+     * @see by.praded.ask_and_go.entity.Question
+     */
     @Override
-    public List<Answer> findAll() {
-        String sql = "SELECT * FROM `answer`";
-        List<Answer> answers = new ArrayList<>();
-        Answer answer;
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                answer = new Answer();
-                answer.setId(resultSet.getLong("id"));
-                answer.setText(resultSet.getString("text"));
-                User user = new User();
-                user.setId(resultSet.getLong("user_id"));
-                answer.setAuthor(user);
-                Question question = new Question();
-                question.setId(resultSet.getLong("question_id"));
-                answer.setQuestion(question);
-                answer.setDate(resultSet.getTimestamp("answer_date").toLocalDateTime());
-                answer.setCorrect(resultSet.getBoolean("is_correct"));
-                answers.add(answer);
-            }
-        } catch (SQLException e) {
-            //TODO LOG
-            e.printStackTrace();
-        }
-        return answers;
-    }
-
-    @Override
-    public List<Answer> findByQuestionId(Long questionId) {
+    public List<Answer> findByQuestionId(Long questionId) throws DaoException {
         String sql = "SELECT `id`, `text`, `user_id`, `answer_date`, `is_correct`" +
                 " FROM `answer` WHERE `question_id` = ?";
         List<Answer> answers = new ArrayList<>();
-        Answer answer;
+
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, questionId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                answer = new Answer();
+                Answer answer = new Answer();
                 answer.setId(resultSet.getLong("id"));
                 answer.setText(resultSet.getString("text"));
                 User user = new User();
@@ -147,10 +164,28 @@ public class AnswerDaoImpl extends BaseDaoImpl implements AnswerDao {
                 answer.setCorrect(resultSet.getBoolean("is_correct"));
                 answers.add(answer);
             }
+            return answers;
         } catch (SQLException e) {
-            //TODO LOG
-            e.printStackTrace();
+            throw new DaoException(e);
         }
-        return answers;
+    }
+
+    /**
+     * Method to make answer correct.
+     *
+     * @param id - identity of the answer to make it correct.
+     * @throws DaoException - may occurs during the updating.
+     */
+    @Override
+    public void makeCorrect(Long id) throws DaoException {
+        String sql = "UPDATE `answer` SET `is_correct` = ? WHERE `id` = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, 1);
+
+            statement.setLong(2, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
     }
 }
