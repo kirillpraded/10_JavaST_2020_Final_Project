@@ -1,0 +1,115 @@
+.panel-group .accordion-icon:after {
+    position: absolute;
+    content: "\f068";
+    font-family: "FontAwesome";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    color: #555;
+    left: 10px;
+    top: 0;
+}
+.panel-group .accordion-icon.collapsed:after {
+    content: "\f067";
+}
+.page-heading {
+    position: relative;
+    padding: 30px 40px;
+    margin: -25px -20px 25px;
+    border-bottom: 1px solid #d9d9d9;
+    background-color: #f2f2f2;
+}
+
+@media (max-width: 800px) {
+    .page-tabs {
+        padding: 25px 20px 0;
+    }
+    .page-tabs .nav-tabs li {
+        float: none;
+        margin-bottom: 5px;
+    }
+    .page-tabs .nav-tabs li:last-child,
+    .page-tabs .nav-tabs li.active:last-child {
+        margin-bottom: 10px;
+    }
+    .page-tabs .nav-tabs > li > a:hover,
+    .page-tabs .nav-tabs > li > a:focus {
+        border: 1px solid #DDD;
+    }
+    .page-tabs .nav-tabs > li.active > a,
+    .page-tabs .nav-tabs > li.active > a:hover,
+    .page-tabs .nav-tabs > li.active > a:focus {
+        border-bottom-color: #ddd;
+    }
+}
+
+
+.media {
+    color: #999999;
+    font-weight: 600;
+    margin-top: 15px;
+}
+.media:first-child {
+    margin-top: 0;
+}
+.media-right,
+.media > .pull-right {
+    padding-left: 10px;
+}
+.media-left,
+.media > .pull-left {
+    padding-right: 10px;
+}
+.media-left,
+.media-right,
+.media-body {
+    display: table-cell;
+    vertical-align: top;
+}
+.media-middle {
+    vertical-align: middle;
+}
+.media-bottom {
+    vertical-align: bottom;
+}
+.media-heading {
+    color: #555555;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.media-list {
+    padding-left: 0;
+    list-style: none;
+}
+body{
+    margin-top:20px;
+    background:#eee;
+}
+.fs35 {
+    font-size: 35px !important;
+}
+
+.mw50 {
+    max-width: 50px !important;
+}
+.mn {
+    margin: 0 !important;
+}
+.mw140 {
+    max-width: 140px !important;
+}
+.mb20 {
+    margin-bottom: 20px !important;
+}
+.mr25 {
+    margin-right: 25px !important;
+}
+
+.mw40 {
+    max-width: 40px !important;
+}
+
+.p30 {
+    padding: 30px !important;
+}

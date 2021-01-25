@@ -3,4 +3,155 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <welcome-file-list>
+        <welcome-file>welcome.jsp</welcome-file>
+    </welcome-file-list>
+
+    <servlet>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <servlet-class>by.praded.ask_and_go.controller.DispatcherServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <!--
+            Есть три варианта:
+            1) прописать все урлы, дабы урлы картинок не затрагивались и соответственно
+            картинки отображались
+            2) Ограничить как нибудь урл паттерны: например, приписать *.html или вначале приписать view/*
+            3) Дать доступ всевозможным урлам, но в таком случае картинки отображаться не будут. "/"
+         -->
+        <url-pattern>/update-image</url-pattern>
+        <url-pattern>/search</url-pattern>
+        <url-pattern>/login</url-pattern>
+        <url-pattern>/logout</url-pattern>
+        <url-pattern>/main</url-pattern>
+        <url-pattern>/delete-answer</url-pattern>
+        <url-pattern>/edit-question</url-pattern>
+        <url-pattern>/edit-answer</url-pattern>
+        <url-pattern>/registration</url-pattern>
+        <url-pattern>/admin</url-pattern>
+        <url-pattern>/admin/edit-user</url-pattern>
+        <url-pattern>/admin/edit-category</url-pattern>
+        <url-pattern>/admin/delete-user</url-pattern>
+        <url-pattern>/admin/add-category</url-pattern>
+        <url-pattern>/admin/delete-category</url-pattern>
+        <url-pattern>/categories</url-pattern>
+        <url-pattern>/questions</url-pattern>
+        <url-pattern>/ask</url-pattern>
+        <url-pattern>/question</url-pattern>
+        <url-pattern>/update-correct</url-pattern>
+        <url-pattern>/close</url-pattern>
+        <url-pattern>/block-author</url-pattern>
+        <url-pattern>/answer</url-pattern>
+        <url-pattern>/lang</url-pattern>
+        <url-pattern>/delete-question</url-pattern>
+        <url-pattern>/user</url-pattern>
+        <url-pattern>/user-edit</url-pattern>
+        <url-pattern>/change-password</url-pattern>
+        <!-- /p/* допустимо
+        -->
+
+    </servlet-mapping>
+
+
+    <jsp-config>
+        <taglib>
+            <taglib-uri>custom</taglib-uri>
+            <taglib-location>/WEB-INF/tld/custom.tld</taglib-location>
+        </taglib>
+    </jsp-config>
+
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>LocaleFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>LoginPageFilter</filter-name>
+        <url-pattern>/login</url-pattern>
+        <url-pattern>/registration</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/update-image</url-pattern>
+        <url-pattern>/logout</url-pattern>
+        <url-pattern>/delete-answer</url-pattern>
+        <url-pattern>/edit-question</url-pattern>
+        <url-pattern>/edit-answer</url-pattern>
+        <url-pattern>/admin</url-pattern>
+        <url-pattern>/admin/edit-user</url-pattern>
+        <url-pattern>/admin/edit-category</url-pattern>
+        <url-pattern>/admin/delete-user</url-pattern>
+        <url-pattern>/admin/add-category</url-pattern>
+        <url-pattern>/admin/delete-category</url-pattern>
+        <url-pattern>/ask</url-pattern>
+        <url-pattern>/question</url-pattern>
+        <url-pattern>/update-correct</url-pattern>
+        <url-pattern>/close</url-pattern>
+        <url-pattern>/block-author</url-pattern>
+        <url-pattern>/answer</url-pattern>
+        <url-pattern>/delete-question</url-pattern>
+        <url-pattern>/user</url-pattern>
+        <url-pattern>/user-edit</url-pattern>
+        <url-pattern>/change-password</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>AdminAuthorizationFilter</filter-name>
+        <url-pattern>/admin</url-pattern>
+        <url-pattern>/admin/edit-user</url-pattern>
+        <url-pattern>/admin/edit-category</url-pattern>
+        <url-pattern>/admin/delete-user</url-pattern>
+        <url-pattern>/admin/add-category</url-pattern>
+        <url-pattern>/admin/delete-category</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>ModeratorAuthorizationFilter</filter-name>
+        <url-pattern>/block-author</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>WriterAuthorizationFilter</filter-name>
+        <url-pattern>/ask</url-pattern>
+        <url-pattern>/answer</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>MessageActionFilter</filter-name>
+        <url-pattern>/delete-question</url-pattern>
+        <url-pattern>/delete-answer</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>UserIdentityFilter</filter-name>
+        <url-pattern>/edit-question</url-pattern>
+        <url-pattern>/edit-answer</url-pattern>
+        <url-pattern>/user-edit</url-pattern>
+        <url-pattern>/change-password</url-pattern>
+        <url-pattern>/update-correct</url-pattern>
+        <url-pattern>/close</url-pattern>
+
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>BlockedUserFilter</filter-name>
+        <url-pattern>/edit-question</url-pattern>
+        <url-pattern>/edit-answer</url-pattern>
+        <url-pattern>/delete-answer</url-pattern>
+        <url-pattern>/delete-question</url-pattern>
+        <url-pattern>/ask</url-pattern>
+        <url-pattern>/answer</url-pattern>
+    </filter-mapping>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/jsp/error.jsp</location>
+    </error-page>
 </web-app>
