@@ -1,0 +1,18 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="All">
+    <test name="application">
+        <classes>
+            <class name="by.praded.ask_and_go.dao.pool.ConnectionPoolTest">
+            </class>
+            <class name="by.praded.ask_and_go.service.impl.UserServiceImplTest">
+            </class>
+            <class name="by.praded.ask_and_go.service.impl.CategoryServiceImplTest">
+            </class>
+            <class name="by.praded.ask_and_go.service.impl.QuestionServiceImplTest">
+            </class>
+            <class name="by.praded.ask_and_go.service.impl.AnswerServiceImplTest">
+            </class>
+        </classes>
+    </test>
+</suite>
