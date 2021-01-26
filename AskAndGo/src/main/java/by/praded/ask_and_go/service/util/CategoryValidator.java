@@ -1,5 +1,7 @@
 package by.praded.ask_and_go.service.util;
 
+import java.util.Objects;
+
 /**
  * @author Kiryl Praded
  * 22.12.2020
@@ -16,6 +18,6 @@ public class CategoryValidator {
      * @see by.praded.ask_and_go.entity.Category
      */
     public static boolean validateCategoryName(String name) {
-        return name.length() > 0 && name.length() <= 50;
+        return Objects.nonNull(name) && name.length() > 0 && name.length() <= 50;
     }
 }
