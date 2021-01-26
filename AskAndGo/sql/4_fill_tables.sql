@@ -1,7 +1,7 @@
-INSERT INTO `user` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `role`) VALUES ('1', 'testUser1', '$10$SXGcanrNJvrRDtPDAVhNIu8xjhJ3c5hhdeNegMCX1tZfQ7DxClPpC', 'kirill', 'praded', 'kirillpraded@bk.ru', '1');
-INSERT INTO `user` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `role`) VALUES ('2', 'testUser2', '$10$SXGcanrNJvrRDtPDAVhNIu8xjhJ3c5hhdeNegMCX1tZfQ7DxClPpC', 'kirill', 'praded', 'kirillpraded@bk.ru', '1');
-INSERT INTO `user` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `role`) VALUES ('3', 'testUser3', '$10$SXGcanrNJvrRDtPDAVhNIu8xjhJ3c5hhdeNegMCX1tZfQ7DxClPpC', 'kirill', 'praded', 'kirillpraded@bk.ru', '1');
-INSERT INTO `user` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `role`) VALUES ('4', 'testUser4', '$10$SXGcanrNJvrRDtPDAVhNIu8xjhJ3c5hhdeNegMCX1tZfQ7DxClPpC', 'kirill', 'praded', 'kirillpraded@bk.ru', '1');
+INSERT INTO `user` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `role`) VALUES ('1', 'testUser1', '$2a$10$6RNnktdw45mWm.C654qzI.Oq9UtLZQvmfbCn6rSFgt8Yp17lctlGu', 'kirill', 'praded', 'kirillpraded@bk.ru', '1');
+INSERT INTO `user` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `role`) VALUES ('2', 'testUser2', '$2a$10$6RNnktdw45mWm.C654qzI.Oq9UtLZQvmfbCn6rSFgt8Yp17lctlGu', 'kirill', 'praded', 'kirillpraded@bk.ru', '1');
+INSERT INTO `user` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `role`) VALUES ('3', 'testUser3', '$2a$10$6RNnktdw45mWm.C654qzI.Oq9UtLZQvmfbCn6rSFgt8Yp17lctlGu', 'kirill', 'praded', 'kirillpraded@bk.ru', '1');
+INSERT INTO `user` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `role`) VALUES ('4', 'testUser4', '$2a$10$6RNnktdw45mWm.C654qzI.Oq9UtLZQvmfbCn6rSFgt8Yp17lctlGu', 'kirill', 'praded', 'kirillpraded@bk.ru', '1');
 
 
 INSERT INTO `category` (`id`, `name`) VALUES ('1', 'Java');
