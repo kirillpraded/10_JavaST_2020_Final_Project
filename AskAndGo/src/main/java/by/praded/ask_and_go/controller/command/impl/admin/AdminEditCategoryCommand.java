@@ -63,8 +63,6 @@ public class AdminEditCategoryCommand implements Command {
                 logger.info(String.format("Category[%d] updated.", category.getId()));
             }
 
-            request.setAttribute("category_error", "category.validation.error");
-
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
             request.setAttribute("category_error", "database.error");
