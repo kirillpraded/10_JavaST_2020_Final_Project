@@ -31,7 +31,7 @@
             <h1 class="display-4 fw-normal">Ask&Go</h1>
             <p class="lead fw-normal"><fmt:message key="footer.info"
                                                    bundle="${ rb }"/></p>
-            <a class="btn btn-outline-secondary" href="<c:url value="/login" />">Sign in</a>
+            <a class="btn btn-outline-secondary" href="<c:url value="/login" />"><fmt:message key="navbar.login" bundle="${ rb }"/></a>
         </div>
         <div class="product-device shadow-sm d-none d-md-block"></div>
         <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>

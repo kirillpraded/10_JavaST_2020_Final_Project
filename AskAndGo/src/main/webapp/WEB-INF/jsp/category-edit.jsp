@@ -35,12 +35,15 @@
     <div class="col-md-6 col-md-offset-3">
 
 
-        <form action="${pageContext.request.contextPath}/admin/edit-category" method="post" accept-charset="UTF-8">
+        <form action="<c:url value="/admin/edit-category" />" id="categoryEditForm" method="post" accept-charset="UTF-8">
             <div class="form-group">
                 <fmt:message key="admin.category.name"
                              bundle="${ rb }"/><input type="text"
-                       class="form-control" id="category_name"
+                       class="form-control" id="categoryName"
                        name="category_name" value="${category.name}" >
+                <div class="invalid-feedback">
+                    <fmt:message key="category.validation.error" bundle="${ rb }"/>
+                </div>
             </div>
             <input type="hidden" id="category_id" name="category_id" value="${category.id}">
             <div class="form-group">
@@ -57,10 +60,11 @@
             </div>
             <button type="submit" class="btn btn-primary"><fmt:message key="submit"
                                                                        bundle="${ rb }"/></button>
-
         </form>
     </div>
 </div>
 <jsp:include page="parts/footer.jsp"/>
+<script src="<c:url value="/js/validators.js" /> "></script>
+<script src="<c:url value="/js/categoryEditValidation.js" /> "></script>
 </body>
 </html>

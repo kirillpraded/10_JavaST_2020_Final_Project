@@ -38,16 +38,26 @@
     <h1>Answer Edit Form</h1>
     <div class="form-group mt-3">
         <c:if test="${not empty requestScope.message}">
-            <div class="alert alert-danger" role="alert"><fmt:message key="${message}"
-                                                                      bundle="${ rb }"/></div>
+
         </c:if>
-        <form action="<c:url value="/edit-answer" />" method="post" accept-charset="UTF-8">
+        <form action="<c:url value="/edit-answer" />" id="addAnswerForm" method="post" accept-charset="UTF-8">
             <div class="form-group">
                 Text
-                <div class="input-group">
-                    <textarea class="form-control" rows="12" name="text" id="text"
+                <textarea class="form-control <c:if test="${not empty requestScope.message}">is-invalid</c:if>" rows="12" name="text" id="text"
                               aria-label="With textarea" required>${requestScope.answer.text}</textarea>
-                </div>
+                <c:choose>
+                    <c:when test="${not empty requestScope.message}">
+                        <div class="invalid-feedback">
+                            <fmt:message key="${message}" bundle="${ rb }"/>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="invalid-feedback">
+                            <fmt:message key="answer.validation.error" bundle="${ rb }"/>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+
             </div>
             <input type="hidden" name="user_id" value="${requestScope.answer.author.id}">
             <input type="hidden" name="answer_id" value="${requestScope.answer.id}">
@@ -58,5 +68,7 @@
     </div>
 </div>
 <jsp:include page="parts/footer.jsp"/>
+<script src="<c:url value="/js/validators.js" />"></script>
+<script src="<c:url value="/js/answerValidation.js"/>"></script>
 </body>
 </html>

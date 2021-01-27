@@ -37,47 +37,69 @@
         <c:if test="${not empty requestScope.message}">
             <div class="alert alert-danger" role="alert"><fmt:message key="${message}" bundle="${ rb }"/></div>
         </c:if>
-        <form action="<c:url value="/ask" />" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+        <form action="<c:url value="/ask" />" id="askForm" method="post" accept-charset="UTF-8"
+              enctype="multipart/form-data">
             <div class="form-group">
                 <fmt:message key="title" bundle="${ rb }"/> <input type="text"
-                                                       class="form-control <c:if test="${not empty requestScope.title_error}">is-invalid</c:if>"
-                                                       id="title"
-                                                       placeholder="<fmt:message key="title" bundle="${ rb }"/>"
-                                                       name="title"
-                                                       value="${requestScope.title}" required/>
-                <c:if test="${not empty requestScope.title_error}">
-                    <div class="invalid-feedback">
-                        <fmt:message key="${title_error}" bundle="${ rb }"/>
-                    </div>
-                </c:if>
-
+                                                                   class="form-control <c:if test="${not empty requestScope.title_error}">is-invalid</c:if>"
+                                                                   id="title"
+                                                                   placeholder="<fmt:message key="title" bundle="${ rb }"/>"
+                                                                   name="title"
+                                                                   value="${requestScope.title}" required/>
+                <c:choose>
+                    <c:when test="${not empty requestScope.title_error}">
+                        <div class="invalid-feedback">
+                            <fmt:message key="${title_error}" bundle="${ rb }"/>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="invalid-feedback">
+                            <fmt:message key="question.title.validation.error" bundle="${ rb }"/>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
             <div class="form-group">
                 <fmt:message key="text"
                              bundle="${ rb }"/>
                 <div class="input-group">
-                    <textarea class="form-control <c:if test="${not empty requestScope.text_error}">is-invalid</c:if>" rows="12" name="text" id="text"
-                              aria-label="With textarea" required><c:if test="${not empty requestScope.text}">${requestScope.text}</c:if></textarea>
-                    <c:if test="${not empty requestScope.text_error}">
-                        <div class="invalid-feedback">
-                            <fmt:message key="${text_error}" bundle="${ rb }"/>
-                        </div>
-                    </c:if>
-
+                    <textarea class="form-control <c:if test="${not empty requestScope.text_error}">is-invalid</c:if>"
+                              rows="12" name="text" id="text"
+                              aria-label="With textarea" required><c:if
+                            test="${not empty requestScope.text}">${requestScope.text}</c:if></textarea>
+                    <c:choose>
+                        <c:when test="${not empty requestScope.text_error}">
+                            <div class="invalid-feedback">
+                                <fmt:message key="${text_error}" bundle="${ rb }"/>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="invalid-feedback">
+                                <fmt:message key="question.text.validation.error" bundle="${ rb }"/>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
             </div>
             <div class="form-group">
                 <fmt:message key="tags"
                              bundle="${ rb }"/> <input type="text"
-                                                         class="form-control" id="tags" value="${tags}"
-                                                         placeholder="<fmt:message key="tag" bundle="${ rb }"/>"
-                                                         name="tags"/>
-                <c:if test="${not empty requestScope.tags_error}">
-                    <div class="invalid-feedback">
-                        <fmt:message key="${tags_error}" bundle="${ rb }"/>
-                    </div>
-                </c:if>
+                                                       class="form-control" id="tags" value="${tags}"
+                                                       placeholder="<fmt:message key="tag" bundle="${ rb }"/>"
+                                                       name="tags"/>
+                <c:choose>
+                    <c:when test="${not empty requestScope.tags_error}">
+                        <div class="invalid-feedback">
+                            <fmt:message key="${tags_error}" bundle="${ rb }"/>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="invalid-feedback">
+                            <fmt:message key="tags.validation.error" bundle="${ rb }"/>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
             <div class="form-group">
                 <fmt:message key="screenshot"
@@ -111,5 +133,7 @@
     </div>
 </div>
 <jsp:include page="parts/footer.jsp"/>
+<script src="<c:url value="/js/validators.js" />"></script>
+<script src="<c:url value="/js/questionValidation.js"/>"></script>
 </body>
 </html>

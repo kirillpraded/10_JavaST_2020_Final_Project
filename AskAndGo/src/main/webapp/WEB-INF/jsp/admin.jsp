@@ -139,10 +139,7 @@
                 <div class="alert alert-success" role="alert"><fmt:message key="${category_success}"
                                                                            bundle="${ rb }"/></div>
             </c:if>
-            <c:if test="${not empty requestScope.category_error}">
-                <div class="alert alert-danger" role="alert"><fmt:message key="${category_error}"
-                                                                          bundle="${ rb }"/></div>
-            </c:if>
+
 
             <div class="form-group">
                 <c:forEach var="category" items="${categories}">
@@ -152,7 +149,7 @@
                 </c:forEach>
             </div>
 
-            <form action="<c:url value="/admin/add-category" />" method="POST" accept-charset="UTF-8">
+            <form action="<c:url value="/admin/add-category" />" id="categoryAddForm"method="POST" accept-charset="UTF-8">
 
                 <div class="form-group">
                     <label for="parent_id"></label>
@@ -169,11 +166,23 @@
                 <div class="form-group">
                     <fmt:message key="admin.category.name" bundle="${ rb }"/>
                     <input type="text"
-                           class="form-control" id="name"
+                           class="form-control <c:if test="${not empty requestScope.category_error}">is-invalid</c:if>" id="nameCategory"
                            placeholder="<fmt:message key="admin.category.name" bundle="${ rb }"/>"
                            name="name"
                            value="${category_name}"
                            required>
+                    <c:choose>
+                        <c:when test="${not empty requestScope.category_error}">
+                            <div class="invalid-feedback">
+                                <fmt:message key="${category_error}" bundle="${ rb }"/>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="invalid-feedback">
+                                <fmt:message key="category.validation.error" bundle="${ rb }"/>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <button type="submit" class="btn btn-primary"><fmt:message key="add" bundle="${ rb }"/></button>
@@ -182,5 +191,7 @@
     </div>
 </div>
 <jsp:include page="parts/footer.jsp"/>
+<script src="<c:url value="/js/validators.js" /> "></script>
+<script src="<c:url value="/js/categoryValidation.js" /> "></script>
 </body>
 </html>

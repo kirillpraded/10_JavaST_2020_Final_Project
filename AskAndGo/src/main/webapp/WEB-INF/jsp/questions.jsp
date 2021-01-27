@@ -47,6 +47,10 @@
                                                                            bundle="${ rb }"/></button>
             </form>
         </div>
+
+    </c:if>
+    <c:if test="${empty questions}">
+        <h1><fmt:message key="questions.not.found" bundle="${ rb }"/></h1>
     </c:if>
     <hr>
     <br>

@@ -98,6 +98,7 @@
                         <h5 class="card-title">${question.author.username} ${question.date}</h5>
                         <p class="card-text"><b>${question.title}</b></p>
                         <p class="card-text">${question.text}</p>
+                        <p class="card-text"><small class="text-muted">tags: <c:forEach var="tag" items="${question.tags}"><a href="<c:url value="/search?q=${tag.text}"/>">${tag.text}</a> </c:forEach></small></p>
                         <c:if test="${not empty question.imageName}">
                             <details>
                                 <summary><fmt:message key="screenshot"
@@ -194,7 +195,7 @@
         <div class="mb-3" style="max-width: 1000px;">
             <div class="row g-0">
                 <div class="col-md-8">
-                    <form accept-charset="UTF-8" action="<c:url value="/answer"/>" method="post">
+                    <form accept-charset="UTF-8" id="addAnswerForm" action="<c:url value="/answer"/>" method="post">
                         <div class="m-3">
                             <input type="hidden" value="${question.id}" id="question_id" name="question_id">
                             <div class="form-group">
@@ -203,25 +204,27 @@
                                             key="${connection_error_message}"
                                             bundle="${ rb }"/></div>
                                 </c:if>
-
                                 <fmt:message key="answer.text"
                                              bundle="${ rb }"/>
-                                <c:if test="${not empty error_message}">
-                                    <div class="alert alert-danger" role="alert">
-                                        <fmt:message key="${error_message}" bundle="${ rb }"/>
-                                    </div>
-                                </c:if>
-                                <div class="input-group">
-
-                                <textarea
-                                        class="form-control"
+                                <textarea class="form-control <c:if test="${not empty error_message}">is-invalid</c:if>"
                                         rows="12"
                                         name="text"
                                         id="text"
                                         aria-label="With textarea"
                                         required>${answer_text}</textarea>
+                                <c:choose>
+                                    <c:when test="${not empty requestScope.error_message}">
+                                        <div class="invalid-feedback">
+                                            <fmt:message key="${error_message}" bundle="${ rb }"/>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="invalid-feedback">
+                                            <fmt:message key="answer.validation.error" bundle="${ rb }"/>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
 
-                                </div>
                             </div>
                             <button type="submit" class="btn btn-secondary btn-sm mt-2"><fmt:message key="submit"
                                                                                                      bundle="${ rb }"/></button>
@@ -233,5 +236,7 @@
     </div>
 </c:if>
 <jsp:include page="parts/footer.jsp"/>
+<script src="<c:url value="/js/validators.js" />"></script>
+<script src="<c:url value="/js/answerValidation.js"/>"></script>
 </body>
 </html>

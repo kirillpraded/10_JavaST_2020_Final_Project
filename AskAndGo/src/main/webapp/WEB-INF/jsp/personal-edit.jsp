@@ -37,7 +37,7 @@
                                                                           bundle="${ rb }"/></div>
             </c:if>
 
-            <form action="<c:url value="/user-edit" />" method="post" accept-charset="UTF-8">
+            <form action="<c:url value="/user-edit" />" id="personalInfoChangeForm" method="post" accept-charset="UTF-8">
 
                 <div class="form-group">
                     <fmt:message key="admin.users.username"
@@ -50,24 +50,37 @@
                     <fmt:message key="admin.users.firstname"
                                  bundle="${ rb }"/> <input type="text"
                                                            class="form-control <c:if test="${not empty requestScope.first_name_msg}">is-invalid</c:if>"
-                                                           id="first_name"
+                                                           id="firstName"
                                                            name="first_name" value="${user.firstName}">
-                    <c:if test="${not empty requestScope.first_name_msg}">
+                    <c:choose>
+                    <c:when test="${not empty requestScope.first_name_msg}">
                         <div class="invalid-feedback"><fmt:message key="${first_name_msg}"
                                                                    bundle="${ rb }"/></div>
-                    </c:if>
+                    </c:when>
+                        <c:otherwise>
+                            <div class="invalid-feedback"><fmt:message key="validation.firstname"
+                                                                       bundle="${ rb }"/></div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <div class="form-group">
                     <fmt:message key="admin.users.lastname"
                                  bundle="${ rb }"/> <input type="text"
                                                            class="form-control <c:if test="${not empty requestScope.last_name_msg}">is-invalid</c:if>"
-                                                           id="last_name"
+                                                           id="lastName"
                                                            name="last_name" value="${user.lastName}">
-                    <c:if test="${not empty requestScope.last_name_msg}">
+                    <c:choose>
+                    <c:when test="${not empty requestScope.last_name_msg}">
                         <div class="invalid-feedback"><fmt:message key="${last_name_msg}"
                                                                    bundle="${ rb }"/></div>
-                    </c:if>
+                    </c:when>
+                        <c:otherwise>
+                            <div class="invalid-feedback"><fmt:message key="validation.lastname"
+                                                                       bundle="${ rb }"/></div>
+
+                        </c:otherwise>
+                    </c:choose>
                 </div>
                 <div class="form-group">
                     <fmt:message key="admin.users.email"
@@ -98,7 +111,8 @@
                 <div class="alert alert-danger" role="alert"><fmt:message key="${error_message}"
                                                                           bundle="${ rb }"/></div>
             </c:if>
-            <form method="post" action="<c:url value="/change-password" />" accept-charset="UTF-8">
+
+            <form method="post" action="<c:url value="/change-password" />" id="changePasswordForm" accept-charset="UTF-8">
                 <div class="form-group">
                     <fmt:message key="password.old"
                                  bundle="${ rb }"/> <input type="password"
@@ -118,20 +132,30 @@
                                                             <c:if test="${not empty requestScope.error_match}">
                                                                 is-invalid
                                                             </c:if>"
-                                                           id="password" placeholder="Password"
+                                                           id="newPassword" placeholder="Password"
                                                            name="new_password" required>
-                    <c:if test="${not empty requestScope.error_match}">
+                    <c:choose>
+                    <c:when test="${not empty requestScope.error_match}">
                         <div class="invalid-feedback"><fmt:message key="${error_match}"
                                                                    bundle="${ rb }"/></div>
-                    </c:if>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="invalid-feedback">
+                            <fmt:message key="password.validation.error" bundle="${ rb }"/>
+                        </div>
+                    </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <div class="form-group">
                     <fmt:message key="password.confirmation"
                                  bundle="${ rb }"/> <input type="password"
                                                            class="form-control"
-                                                           id="password_confirm" placeholder="Password Confirmation"
+                                                           id="passwordConfirmation" placeholder="Password Confirmation"
                                                            name="password_confirm" required>
+                    <div class="invalid-feedback">
+                        <fmt:message key="password.match.error" bundle="${ rb }"/>
+                    </div>
                 </div>
 
                 <input type="hidden"
@@ -147,5 +171,8 @@
     </div>
 </div>
 <jsp:include page="parts/footer.jsp"/>
+
+<script src="<c:url value="/js/validators.js" /> "></script>
+<script src="<c:url value="/js/passwordChangeValidation.js" /> "></script>
 </body>
 </html>

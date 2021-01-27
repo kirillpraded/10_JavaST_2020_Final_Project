@@ -36,39 +36,47 @@
         <c:if test="${not empty requestScope.message}">
             <div class="alert alert-danger" role="alert">${requestScope.message}</div>
         </c:if>
-        <form action="<c:url value="/edit-question" />" method="post" accept-charset="UTF-8">
+        <form action="<c:url value="/edit-question" />" id="questionEditForm" method="post" accept-charset="UTF-8">
             <div class="form-group">
                 <fmt:message key="title"
                              bundle="${ rb }"/> <input type="text"
                                                        class="form-control <c:if test="${not empty requestScope.title_error}">is-invalid</c:if>"
                                                        id="title" placeholder="Title"
                                                        name="title" value="${requestScope.question.title}" required/>
-                <c:if test="${not empty requestScope.title_error}">
+                <c:choose>
+                <c:when test="${not empty requestScope.title_error}">
                     <div class="invalid-feedback">
                         <fmt:message key="${requestScope.title_error}" bundle="${ rb }"/>
                     </div>
-                </c:if>
+                </c:when>
+                    <c:otherwise>
+                        <div class="invalid-feedback">
+                            <fmt:message key="question.title.validation.error" bundle="${ rb }"/>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
 
             </div>
             <div class="form-group">
                 <fmt:message key="text"
                              bundle="${ rb }"/>
-                <p>
-                    <c:if test="${not empty requestScope.text_error}">
-                        <div class="alert alert-danger" role="alert">
-                            <fmt:message key="${requestScope.text_error}" bundle="${ rb }"/>
-                        </div>
-                    </c:if>
-                </p>
-                <div class="input-group">
-                    <textarea class="form-control" rows="12" name="text" id="text"
-                              aria-label="With textarea" required>${requestScope.question.text}</textarea>
-                    <c:if test="${not empty requestScope.text_error}">
+
+                <textarea class="form-control <c:if test="${not empty requestScope.text_error}">is-invalid</c:if>"
+                          rows="12" name="text" id="text"
+                          aria-label="With textarea" required>${requestScope.question.text}</textarea>
+                <c:choose>
+                <c:when test="${not empty requestScope.text_error}">
+                    <div class="invalid-feedback">
+                        <fmt:message key="${requestScope.text_error}" bundle="${ rb }"/>
+                    </div>
+                </c:when>
+                    <c:otherwise>
                         <div class="invalid-feedback">
-                            <fmt:message key="${requestScope.text_error}" bundle="${ rb }"/>
+                            <fmt:message key="question.text.validation.error" bundle="${ rb }"/>
                         </div>
-                    </c:if>
-                </div>
+                    </c:otherwise>
+                </c:choose>
+
             </div>
             <input type="hidden" name="user_id" value="${requestScope.question.author.id}">
             <input type="hidden" name="question_id" value="${requestScope.question.id}">
@@ -79,5 +87,7 @@
     </div>
 </div>
 <jsp:include page="parts/footer.jsp"/>
+<script src="<c:url value="/js/validators.js" />"></script>
+<script src="<c:url value="/js/questionEditValidation.js"/>"></script>
 </body>
 </html>

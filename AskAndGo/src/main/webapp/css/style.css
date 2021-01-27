@@ -4,3 +4,7 @@
 .invisible {
     display: none;
 }
+
+.invalid {
+    border: 1px solid red;
+}
