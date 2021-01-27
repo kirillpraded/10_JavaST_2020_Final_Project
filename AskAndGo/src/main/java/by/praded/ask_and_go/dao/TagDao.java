@@ -24,4 +24,12 @@ public interface TagDao extends Dao<Tag> {
      */
     List<Tag> findByText(String tagText) throws DaoException;
 
+    /**
+     * Declaration of the method to find list of tags by question identity.
+     *
+     * @param id - identity of question to search by.
+     * @return list of tags.
+     * @throws DaoException - exception may occurs during the reading.
+     */
+    List<Tag> findByQuestionId(Long id) throws DaoException;
 }

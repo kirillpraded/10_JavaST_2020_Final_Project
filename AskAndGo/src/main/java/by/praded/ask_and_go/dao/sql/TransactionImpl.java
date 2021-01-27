@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
@@ -32,7 +32,7 @@ public class TransactionImpl implements Transaction {
     /**
      * Map of data access objects.
      */
-    private final Map<Class<? extends Dao<?>>, BaseDaoImpl> daoRepo;
+    private final Map<AvailableDao, BaseDaoImpl> daoRepo;
 
     /**
      * Transaction constructor.
@@ -48,13 +48,13 @@ public class TransactionImpl implements Transaction {
         } catch (SQLException e) {
             throw new ConnectionPoolException(e.getMessage(), e);
         }
-        daoRepo = new HashMap<>();
-        //todo плохая реализация!!!! тк при создании транзакции автоматически создаются все дао, неправильно
-        daoRepo.put(UserDao.class, new UserDaoImpl(connection));
-        daoRepo.put(AnswerDao.class, new AnswerDaoImpl(connection));
-        daoRepo.put(CategoryDao.class, new CategoryDaoImpl(connection));
-        daoRepo.put(QuestionDao.class, new QuestionDaoImpl(connection));
-        daoRepo.put(TagDao.class, new TagDaoImpl(connection));
+        daoRepo = new EnumMap<>(AvailableDao.class);
+        //при создании транзакции автоматически создаются 6 дао, теряем в памяти, создавая сразу 6 объектов
+        daoRepo.put(AvailableDao.USER, new UserDaoImpl(connection));
+        daoRepo.put(AvailableDao.ANSWER, new AnswerDaoImpl(connection));
+        daoRepo.put(AvailableDao.CATEGORY, new CategoryDaoImpl(connection));
+        daoRepo.put(AvailableDao.QUESTION, new QuestionDaoImpl(connection));
+        daoRepo.put(AvailableDao.TAG, new TagDaoImpl(connection));
     }
 
     /**
@@ -67,7 +67,7 @@ public class TransactionImpl implements Transaction {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <Type extends Dao<?>> Type createDao(Class<Type> key) {
+    public <Type extends Dao<?>> Type createDao(AvailableDao key) {
         return (Type) daoRepo.get(key);
     }
 

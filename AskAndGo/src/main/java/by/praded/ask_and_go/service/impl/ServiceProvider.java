@@ -2,6 +2,7 @@ package by.praded.ask_and_go.service.impl;
 
 import by.praded.ask_and_go.service.*;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class ServiceProvider {
      * Initialize {@link ServiceProvider#repository} and puts all services.
      */
     private ServiceProvider() {
-        repository = new HashMap<>();
+        repository = new EnumMap<>(Service.class);
         repository.put(Service.CATEGORY, new CategoryServiceImpl());
         repository.put(Service.USER, new UserServiceImpl());
         repository.put(Service.QUESTION, new QuestionServiceImpl());

@@ -17,7 +17,7 @@ public interface Transaction {
      * @return created dao of given type.
      * @see Dao
      */
-    <Type extends Dao<?>> Type createDao(Class<Type> key);
+    <Type extends Dao<?>> Type createDao(AvailableDao key);
 
     /**
      * Declaration of the method to commit the transaction.

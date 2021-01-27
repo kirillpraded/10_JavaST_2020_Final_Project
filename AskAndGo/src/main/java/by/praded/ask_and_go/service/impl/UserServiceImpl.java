@@ -1,5 +1,6 @@
 package by.praded.ask_and_go.service.impl;
 
+import by.praded.ask_and_go.dao.AvailableDao;
 import by.praded.ask_and_go.dao.Transaction;
 import by.praded.ask_and_go.dao.UserDao;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService {
         try {
             transaction = new TransactionImpl(true);
 
-            UserDao dao = transaction.createDao(UserDao.class);
+            UserDao dao = transaction.createDao(AvailableDao.USER);
             Optional<User> user = Optional.ofNullable(dao.findByUsername(username));
             if (user.isPresent() && BCrypt.checkpw(password, user.get().getPassword())) {
                 user.get().setPassword("");
@@ -119,7 +120,7 @@ public class UserServiceImpl implements UserService {
             }
             transaction = new TransactionImpl(true);
 
-            UserDao dao = transaction.createDao(UserDao.class);
+            UserDao dao = transaction.createDao(AvailableDao.USER);
 
             User user = new User();
             user.setLastName(lastName);
@@ -152,7 +153,7 @@ public class UserServiceImpl implements UserService {
         try {
             transaction = new TransactionImpl(true);
 
-            UserDao dao = transaction.createDao(UserDao.class);
+            UserDao dao = transaction.createDao(AvailableDao.USER);
             return dao.findAll();
         } finally {
             if (transaction != null) {
@@ -177,7 +178,7 @@ public class UserServiceImpl implements UserService {
         try {
             transaction = new TransactionImpl(true);
 
-            UserDao dao = transaction.createDao(UserDao.class);
+            UserDao dao = transaction.createDao(AvailableDao.USER);
             Optional<User> user = Optional.ofNullable(dao.read(id));
 
             if (user.isPresent()) {
@@ -207,7 +208,7 @@ public class UserServiceImpl implements UserService {
         try {
             transaction = new TransactionImpl(true);
 
-            UserDao dao = transaction.createDao(UserDao.class);
+            UserDao dao = transaction.createDao(AvailableDao.USER);
             dao.updateRole(user);
         } finally {
             if (transaction != null) {
@@ -229,7 +230,7 @@ public class UserServiceImpl implements UserService {
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
 
-            UserDao dao = transaction.createDao(UserDao.class);
+            UserDao dao = transaction.createDao(AvailableDao.USER);
             dao.delete(id);
         } finally {
             if (transaction != null) {
@@ -270,7 +271,7 @@ public class UserServiceImpl implements UserService {
             }
 
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            UserDao dao = transaction.createDao(UserDao.class);
+            UserDao dao = transaction.createDao(AvailableDao.USER);
 
             dao.update(user);
         } finally {
@@ -309,7 +310,7 @@ public class UserServiceImpl implements UserService {
             }
 
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            UserDao dao = transaction.createDao(UserDao.class);
+            UserDao dao = transaction.createDao(AvailableDao.USER);
 
             Optional<User> optionalUser = Optional.ofNullable(dao.findByUsername(user.getUsername()));
             if (optionalUser.isPresent() && BCrypt.checkpw(user.getPassword(), optionalUser.get().getPassword())) {
@@ -339,7 +340,7 @@ public class UserServiceImpl implements UserService {
         Transaction transaction = null;
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            UserDao dao = transaction.createDao(UserDao.class);
+            UserDao dao = transaction.createDao(AvailableDao.USER);
             dao.updateProfileImage(user);
         } finally {
             if (transaction != null) {

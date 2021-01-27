@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.service.impl;
 
 import by.praded.ask_and_go.dao.AnswerDao;
+import by.praded.ask_and_go.dao.AvailableDao;
 import by.praded.ask_and_go.dao.QuestionDao;
 import by.praded.ask_and_go.dao.Transaction;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
@@ -44,7 +45,7 @@ public class AnswerServiceImpl implements AnswerService {
             }
 
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            AnswerDao answerDao = transaction.createDao(AnswerDao.class);
+            AnswerDao answerDao = transaction.createDao(AvailableDao.ANSWER);
             answerDao.create(answer);
         } finally {
             if (transaction != null) {
@@ -65,8 +66,8 @@ public class AnswerServiceImpl implements AnswerService {
         Transaction transaction = null;
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            AnswerDao answerDao = transaction.createDao(AnswerDao.class);
-            QuestionDao questionDao = transaction.createDao(QuestionDao.class);
+            AnswerDao answerDao = transaction.createDao(AvailableDao.ANSWER);
+            QuestionDao questionDao = transaction.createDao(AvailableDao.QUESTION);
 
             questionDao.makeContainsCorrect(answer.getQuestion().getId());
             answerDao.makeCorrect(answer.getId());
@@ -89,7 +90,7 @@ public class AnswerServiceImpl implements AnswerService {
         Transaction transaction = null;
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            AnswerDao answerDao = transaction.createDao(AnswerDao.class);
+            AnswerDao answerDao = transaction.createDao(AvailableDao.ANSWER);
 
             answerDao.delete(answerId);
         } finally {
@@ -113,7 +114,7 @@ public class AnswerServiceImpl implements AnswerService {
         Transaction transaction = null;
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            AnswerDao answerDao = transaction.createDao(AnswerDao.class);
+            AnswerDao answerDao = transaction.createDao(AvailableDao.ANSWER);
             Optional<Answer> answer = Optional.ofNullable(answerDao.read(answerId));
             if (answer.isPresent()) {
                 return answer.get();
@@ -145,7 +146,7 @@ public class AnswerServiceImpl implements AnswerService {
             }
 
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            AnswerDao answerDao = transaction.createDao(AnswerDao.class);
+            AnswerDao answerDao = transaction.createDao(AvailableDao.ANSWER);
 
             answerDao.update(answer);
         } finally {

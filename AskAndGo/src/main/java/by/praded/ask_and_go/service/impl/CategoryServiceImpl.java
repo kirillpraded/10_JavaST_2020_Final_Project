@@ -1,5 +1,6 @@
 package by.praded.ask_and_go.service.impl;
 
+import by.praded.ask_and_go.dao.AvailableDao;
 import by.praded.ask_and_go.dao.CategoryDao;
 import by.praded.ask_and_go.dao.Transaction;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
@@ -40,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
         Transaction transaction = null;
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            CategoryDao dao = transaction.createDao(CategoryDao.class);
+            CategoryDao dao = transaction.createDao(AvailableDao.CATEGORY);
 
             List<Category> rootCategories = dao.findAllRoots();
 
@@ -71,12 +72,12 @@ public class CategoryServiceImpl implements CategoryService {
 
             if (!CategoryValidator.validateCategoryName(category.getName())) {
                 Map<String, String> validationErrors = new HashMap<>();
-                validationErrors.put("category_error","category.validation.error");
+                validationErrors.put("category_error", "category.validation.error");
                 throw new ValidationException(validationErrors);
             }
 
                 transaction = TransactionFactory.getInstance().createTransaction(true);
-            CategoryDao dao = transaction.createDao(CategoryDao.class);
+            CategoryDao dao = transaction.createDao(AvailableDao.CATEGORY);
             dao.create(category);
         } finally {
             if (transaction != null) {
@@ -98,7 +99,7 @@ public class CategoryServiceImpl implements CategoryService {
         Transaction transaction = null;
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            CategoryDao dao = transaction.createDao(CategoryDao.class);
+            CategoryDao dao = transaction.createDao(AvailableDao.CATEGORY);
 
             dao.delete(categoryId);
         } finally {
@@ -123,7 +124,7 @@ public class CategoryServiceImpl implements CategoryService {
         Transaction transaction = null;
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            CategoryDao dao = transaction.createDao(CategoryDao.class);
+            CategoryDao dao = transaction.createDao(AvailableDao.CATEGORY);
             Optional<Category> category = Optional.ofNullable(dao.read(id));
             if (category.isPresent()) {
                 return category.get();
@@ -156,7 +157,7 @@ public class CategoryServiceImpl implements CategoryService {
                 throw new ValidationException(validationErrors);
             }
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            CategoryDao dao = transaction.createDao(CategoryDao.class);
+            CategoryDao dao = transaction.createDao(AvailableDao.CATEGORY);
 
             dao.update(category);
         } finally {

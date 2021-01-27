@@ -41,11 +41,11 @@ public class QuestionServiceImpl implements QuestionService {
         Transaction transaction = null;
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            QuestionDao questionDao = transaction.createDao(QuestionDao.class);
-
-            UserDao userDao = transaction.createDao(UserDao.class);
-            CategoryDao categoryDao = transaction.createDao(CategoryDao.class);
-            AnswerDao answerDao = transaction.createDao(AnswerDao.class);
+            QuestionDao questionDao = transaction.createDao(AvailableDao.QUESTION);
+            TagDao tagDao = transaction.createDao(AvailableDao.TAG);
+            UserDao userDao = transaction.createDao(AvailableDao.USER);
+            CategoryDao categoryDao = transaction.createDao(AvailableDao.CATEGORY);
+            AnswerDao answerDao = transaction.createDao(AvailableDao.ANSWER);
 
 
             Optional<Question> optionalQuestion = Optional.ofNullable(questionDao.read(id));
@@ -63,6 +63,7 @@ public class QuestionServiceImpl implements QuestionService {
 
             question.setCategory(categoryDao.read(question.getCategory().getId()));
             question.setAnswers(answers);
+            question.setTags(tagDao.findByQuestionId(id));
             return question;
         } finally {
             if (transaction != null) {
@@ -86,10 +87,10 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
 
-            QuestionDao dao = transaction.createDao(QuestionDao.class);
+            QuestionDao dao = transaction.createDao(AvailableDao.QUESTION);
             List<Question> questions = dao.findByCategoryId(categoryId);
 
-            UserDao userDao = transaction.createDao(UserDao.class);
+            UserDao userDao = transaction.createDao(AvailableDao.USER);
             for (Question question : questions) {
                 question.setAuthor(userDao.read(question.getId()));
             }
@@ -117,17 +118,17 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
 
-            QuestionDao questionDao = transaction.createDao(QuestionDao.class);
+            QuestionDao questionDao = transaction.createDao(AvailableDao.QUESTION);
 
             Set<Question> questions = new HashSet<>(questionDao.findByTitle(query));
 
-            TagDao tagDao = transaction.createDao(TagDao.class);
+            TagDao tagDao = transaction.createDao(AvailableDao.TAG);
             for (Tag tag : tagDao.findByText(query)) {
                 questions.addAll(questionDao.findByTagId(tag.getId()));
             }
 
 
-            UserDao userDao = transaction.createDao(UserDao.class);
+            UserDao userDao = transaction.createDao(AvailableDao.USER);
             for (Question question : questions) {
                 question.setAuthor(userDao.read(question.getId()));
             }
@@ -172,8 +173,8 @@ public class QuestionServiceImpl implements QuestionService {
                 throw new ValidationException(validationErrorMap);
             }
             transaction = TransactionFactory.getInstance().createTransaction(false);
-            TagDao tagDao = transaction.createDao(TagDao.class);
-            QuestionDao questionDao = transaction.createDao(QuestionDao.class);
+            TagDao tagDao = transaction.createDao(AvailableDao.TAG);
+            QuestionDao questionDao = transaction.createDao(AvailableDao.QUESTION);
             try {
                 for (Tag tag :
                         question.getTags()) {
@@ -204,7 +205,7 @@ public class QuestionServiceImpl implements QuestionService {
         Transaction transaction = null;
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            QuestionDao questionDao = transaction.createDao(QuestionDao.class);
+            QuestionDao questionDao = transaction.createDao(AvailableDao.QUESTION);
             questionDao.closeQuestion(id);
         } finally {
             if (transaction != null) {
@@ -225,7 +226,7 @@ public class QuestionServiceImpl implements QuestionService {
         Transaction transaction = null;
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            QuestionDao questionDao = transaction.createDao(QuestionDao.class);
+            QuestionDao questionDao = transaction.createDao(AvailableDao.QUESTION);
 
             questionDao.delete(qid);
         } finally {
@@ -261,7 +262,7 @@ public class QuestionServiceImpl implements QuestionService {
             }
 
             transaction = TransactionFactory.getInstance().createTransaction(true);
-            QuestionDao questionDao = transaction.createDao(QuestionDao.class);
+            QuestionDao questionDao = transaction.createDao(AvailableDao.QUESTION);
 
             questionDao.update(question);
         } finally {

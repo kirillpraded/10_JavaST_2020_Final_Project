@@ -174,4 +174,28 @@ public class TagDaoImpl extends BaseDaoImpl implements TagDao {
         }
     }
 
+    /**
+     * Method to find list of tags by question id.
+     *
+     * @param id - identity of question to search by.
+     * @return found list of tags.
+     * @throws DaoException - exception may occurs during the reading.
+     */
+    @Override
+    public List<Tag> findByQuestionId(Long id) throws DaoException {
+        String sql = "SELECT `tag_id` FROM `question_tag` WHERE `question_id` = ?";
+
+        List<Tag> tags = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Tag tag = read(resultSet.getLong("tag_id"));
+                tags.add(tag);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return tags;
+    }
 }
