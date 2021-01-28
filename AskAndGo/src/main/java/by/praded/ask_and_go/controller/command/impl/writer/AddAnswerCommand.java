@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.writer;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Answer;
@@ -36,11 +37,11 @@ public class AddAnswerCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String answerText = request.getParameter("text");
+        String answerText = request.getParameter(Attribute.TEXT);
         try {
-            Long questionId = Long.parseLong(request.getParameter("question_id"));
+            Long questionId = Long.parseLong(request.getParameter(Attribute.QUESTION_ID));
             Answer answer = new Answer();
-            answer.setAuthor((User) request.getSession().getAttribute("auth_user"));
+            answer.setAuthor((User) request.getSession().getAttribute(Attribute.AUTH_USER));
             answer.setText(answerText.replaceAll("<","&lt;")
                     .replaceAll(">", "&gt;"));
             Question question = new Question();
@@ -56,12 +57,12 @@ public class AddAnswerCommand implements Command {
 
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-            request.setAttribute("connection_error_message", "database.error");
-            request.setAttribute("answer_text", answerText);
+            request.setAttribute(Attribute.CONNECTION_ERROR_MESSAGE, "database.error");
+            request.setAttribute(Attribute.ANSWER_TEXT, answerText);
             request.getRequestDispatcher("/question").forward(request, response);
         } catch (ValidationException e) {
             e.getAttributes().forEach(request::setAttribute);
-            request.setAttribute("answer_text", answerText);
+            request.setAttribute(Attribute.ANSWER_TEXT, answerText);
             request.getRequestDispatcher("/question").forward(request, response);
             logger.debug("Answer validation error.");
         }

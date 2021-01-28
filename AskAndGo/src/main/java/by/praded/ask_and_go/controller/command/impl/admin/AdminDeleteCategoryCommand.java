@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.admin;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.service.CategoryService;
@@ -34,16 +35,16 @@ public class AdminDeleteCategoryCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         try {
-            Long id = Long.parseLong(request.getParameter("category_id"));
+            Long id = Long.parseLong(request.getParameter(Attribute.CATEGORY_ID));
 
             CategoryService categoryService = ServiceProvider.getInstance().takeService(Service.CATEGORY);
             categoryService.delete(id);
 
             logger.info(String.format("Category id=%d successfully deleted", id));
-            request.setAttribute("category_success", "category.delete-success");
+            request.setAttribute(Attribute.CATEGORY_SUCCESS, "category.delete-success");
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-            request.setAttribute("category_error", "database.error");
+            request.setAttribute(Attribute.CATEGORY_ERROR, "database.error");
         }
         request.getRequestDispatcher("/admin").forward(request, response);
     }

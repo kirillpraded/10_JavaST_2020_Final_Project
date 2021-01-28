@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.admin;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.service.Service;
@@ -34,13 +35,13 @@ public class UserDeleteCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             UserService service = ServiceProvider.getInstance().takeService(Service.USER);
-            Long id = Long.parseLong(request.getParameter("id"));
+            Long id = Long.parseLong(request.getParameter(Attribute.ID));
             service.deleteUser(id);
             logger.info(String.format("User[%d] successfully deleted.", id));
-            request.setAttribute("msg_user_success", "user.delete.success");
+            request.setAttribute(Attribute.MSG_USER_SUCCESS, "user.delete.success");
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-            request.setAttribute("msg_user_error", "database.error");
+            request.setAttribute(Attribute.MSG_USER_ERROR, "database.error");
         }
         request.getRequestDispatcher("/admin").forward(request, response);
     }

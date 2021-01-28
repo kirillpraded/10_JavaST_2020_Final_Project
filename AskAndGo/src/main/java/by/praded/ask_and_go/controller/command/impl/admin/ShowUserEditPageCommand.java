@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.admin;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.User;
@@ -35,18 +36,18 @@ public class ShowUserEditPageCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
-            Long id = Long.parseLong(request.getParameter("id"));
+            Long id = Long.parseLong(request.getParameter(Attribute.ID));
             UserService userService = ServiceProvider.getInstance().takeService(Service.USER);
             User user = userService.findUserById(id);
 
-            request.setAttribute("user", user);
+            request.setAttribute(Attribute.USER, user);
             request.getRequestDispatcher("/WEB-INF/jsp/user-edit.jsp").forward(request, response);
         } catch (EntityNotExistsException | NumberFormatException e) {
             logger.debug("Page not found", e);
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Такая страница не найдена");
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "error-page.not-found");
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Ошибка сервера. Обратитесь к администратору или повторите попытку позже");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "error-page.server");
         }
     }
 }

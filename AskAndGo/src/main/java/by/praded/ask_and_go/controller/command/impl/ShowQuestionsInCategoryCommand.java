@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Category;
@@ -38,7 +39,7 @@ public class ShowQuestionsInCategoryCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String categoryId = request.getParameter("category_id");
+        String categoryId = request.getParameter(Attribute.CATEGORY_ID);
         if (Objects.nonNull(categoryId) && !categoryId.isEmpty()) {
             try {
                 Long categoryIdLong = Long.parseLong(categoryId);
@@ -49,8 +50,8 @@ public class ShowQuestionsInCategoryCommand implements Command {
                 QuestionService qService = ServiceProvider.getInstance().takeService(Service.QUESTION);
                 List<Question> questions = qService.findQuestionsByCategoryId(categoryIdLong);
 
-                request.setAttribute("category", category);
-                request.setAttribute("questions", questions);
+                request.setAttribute(Attribute.CATEGORY, category);
+                request.setAttribute(Attribute.QUESTIONS, questions);
                 request.getRequestDispatcher("/WEB-INF/jsp/questions.jsp").forward(request, response);
             } catch (NumberFormatException | EntityNotExistsException e) {
                 logger.debug("Page not found", e);
@@ -60,7 +61,6 @@ public class ShowQuestionsInCategoryCommand implements Command {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "error-page.server");
             }
         } else {
-            //todo можно показать последние 20 вопросов
             logger.debug("Page not found");
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "error-page.not-found");
         }

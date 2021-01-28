@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.service.QuestionService;
@@ -32,21 +33,18 @@ public class DeleteQuestionCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String questionId = request.getParameter("question_id");
+        String questionId = request.getParameter(Attribute.QUESTION_ID);
         try {
             Long questionIdLong = Long.parseLong(questionId);
 
-            QuestionService questionService = ServiceProvider
-                    .getInstance()
-                    .takeService(Service.QUESTION);
+            QuestionService questionService = ServiceProvider.getInstance().takeService(Service.QUESTION);
 
             questionService.deleteQuestion(questionIdLong);
-            //todo куда редиректнуть после удаления вопроса
             logger.info(String.format("Question[%s] deleted.", questionId));
             response.sendRedirect(request.getContextPath() + "/categories");
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-            request.setAttribute("message", "database.error");
+            request.setAttribute(Attribute.MESSAGE, "database.error");
             request.getRequestDispatcher("/question").forward(request, response);
         }
     }

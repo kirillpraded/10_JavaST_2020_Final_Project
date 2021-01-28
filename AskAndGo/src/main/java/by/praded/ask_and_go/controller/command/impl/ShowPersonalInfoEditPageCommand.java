@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.service.Service;
@@ -34,13 +35,13 @@ public class ShowPersonalInfoEditPageCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String userId = request.getParameter("user_id");
+        String userId = request.getParameter(Attribute.USER_ID);
         if (Objects.nonNull(userId) && !userId.isEmpty()) {
             try {
                 Long userIdLong = Long.parseLong(userId);
                 UserService userService = ServiceProvider.getInstance().takeService(Service.USER);
 
-                request.setAttribute("user", userService.findUserById(userIdLong));
+                request.setAttribute(Attribute.USER, userService.findUserById(userIdLong));
                 request.getRequestDispatcher("/WEB-INF/jsp/personal-edit.jsp").forward(request, response);
             } catch (NumberFormatException | EntityNotExistsException e) {
                 logger.debug("Page not found", e);

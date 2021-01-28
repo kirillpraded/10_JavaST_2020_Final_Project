@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.admin;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Role;
@@ -37,8 +38,8 @@ public class UpdateUserRoleCommand implements Command {
 
         try {
             User user = new User();
-            user.setId(Long.parseLong(request.getParameter("id")));
-            user.setRole(Role.values()[Integer.parseInt(request.getParameter("role"))]);
+            user.setId(Long.parseLong(request.getParameter(Attribute.ID)));
+            user.setRole(Role.values()[Integer.parseInt(request.getParameter(Attribute.ROLE))]);
             UserService service = ServiceProvider.getInstance().takeService(Service.USER);
 
             service.updateUserRole(user);
@@ -47,10 +48,10 @@ public class UpdateUserRoleCommand implements Command {
                     user.getId(),
                     user.getRole().getIdentity()));
 
-            request.setAttribute("msg_user_success", "user.role-update.success");
+            request.setAttribute(Attribute.MSG_USER_SUCCESS, "user.role-update.success");
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-            request.setAttribute("msg_user_error", "database.error");
+            request.setAttribute(Attribute.MSG_USER_ERROR, "database.error");
         }
         request.getRequestDispatcher("/admin").forward(request, response);
     }

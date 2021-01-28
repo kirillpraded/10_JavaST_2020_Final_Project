@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,9 +29,8 @@ public class LogoutCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        User user = (User) request.getSession().getAttribute("auth_user");
+        User user = (User) request.getSession().getAttribute(Attribute.AUTH_USER);
         logger.info(String.format("User[%d] is logged out", user.getId()));
-        //сессия может быть инвалидирована только один раз, далее просто выкидывается npe
         request.getSession(false).invalidate();
         response.sendRedirect(request.getHeader("referer"));
     }

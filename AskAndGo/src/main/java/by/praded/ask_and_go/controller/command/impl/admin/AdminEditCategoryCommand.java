@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.admin;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Category;
@@ -36,27 +37,27 @@ public class AdminEditCategoryCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
-            Long id = Long.parseLong(request.getParameter("category_id"));
+            Long id = Long.parseLong(request.getParameter(Attribute.CATEGORY_ID));
 
             CategoryService service = ServiceProvider.getInstance().takeService(Service.CATEGORY);
 
             Category category = new Category();
             category.setId(id);
-            category.setName(request.getParameter("category_name")
+            category.setName(request.getParameter(Attribute.CATEGORY_NAME)
                     .replaceAll("<","&lt;")
                     .replaceAll(">", "&gt;"));
 
 
-            if (!request.getParameter("parent_id").isEmpty()) {
+            if (!request.getParameter(Attribute.PARENT_ID).isEmpty()) {
                 Category parent = new Category();
-                parent.setId(Long.parseLong(request.getParameter("parent_id")));
+                parent.setId(Long.parseLong(request.getParameter(Attribute.PARENT_ID)));
                 category.setParent(parent);
                 //попытка сделать категорию своим же наследником недопустима
                 if (!parent.getId().equals(category.getId())) {
                     service.updateCategory(category);
-                    request.setAttribute("category_success", "category.update-success");
+                    request.setAttribute(Attribute.CATEGORY_SUCCESS, "category.update-success");
                 } else {
-                    request.setAttribute("category_error", "category.update-error");
+                    request.setAttribute(Attribute.CATEGORY_ERROR, "category.update-error");
                 }
             } else {
                 service.updateCategory(category);
@@ -65,7 +66,7 @@ public class AdminEditCategoryCommand implements Command {
 
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-            request.setAttribute("category_error", "database.error");
+            request.setAttribute(Attribute.CATEGORY_ERROR, "database.error");
         } catch (ValidationException e) {
             e.getAttributes().forEach(request::setAttribute);
         }

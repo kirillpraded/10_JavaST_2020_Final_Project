@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Category;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
@@ -33,18 +34,15 @@ public class ShowCategoriesCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
         try {
             CategoryService categoryService = ServiceProvider.getInstance().takeService(Service.CATEGORY);
 
             List<Category> allCategories = categoryService.findAllCategories();
-            request.setAttribute("categories", allCategories);
+            request.setAttribute(Attribute.CATEGORIES, allCategories);
             request.getRequestDispatcher("/WEB-INF/jsp/all-categories.jsp").forward(request, response);
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "error-page.server");
         }
-
-
     }
 }

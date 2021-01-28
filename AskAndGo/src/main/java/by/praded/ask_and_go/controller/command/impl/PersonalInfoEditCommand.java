@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.User;
@@ -35,10 +36,10 @@ public class PersonalInfoEditCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        String email = request.getParameter("email");
-        String firstName = request.getParameter("first_name");
-        String lastName = request.getParameter("last_name");
-        User authUser = (User) request.getSession().getAttribute("auth_user");
+        String email = request.getParameter(Attribute.EMAIL);
+        String firstName = request.getParameter(Attribute.FIRST_NAME);
+        String lastName = request.getParameter(Attribute.LAST_NAME);
+        User authUser = (User) request.getSession().getAttribute(Attribute.AUTH_USER);
 
 
         User user = new User();
@@ -58,12 +59,12 @@ public class PersonalInfoEditCommand implements Command {
             response.sendRedirect(request.getContextPath() + "/user?user_id=" + user.getId());
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-            request.setAttribute("user", user);
-            request.setAttribute("error_message", "database.error");
+            request.setAttribute(Attribute.USER, user);
+            request.setAttribute(Attribute.ERROR_MESSAGE, "database.error");
             request.getRequestDispatcher("/WEB-INF/jsp/personal-edit.jsp").forward(request, response);
         } catch (ValidationException e) {
             e.getAttributes().forEach(request::setAttribute);
-            request.setAttribute("user", user);
+            request.setAttribute(Attribute.USER, user);
             request.getRequestDispatcher("/WEB-INF/jsp/personal-edit.jsp").forward(request, response);
         }
     }

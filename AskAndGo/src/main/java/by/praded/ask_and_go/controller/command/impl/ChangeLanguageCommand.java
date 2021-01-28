@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,8 +31,7 @@ public class ChangeLanguageCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
-        //referer - bad practice. Некоторые браузеры могут попросту не отправлять реферер
-        String language = request.getParameter("lang");
+        String language = request.getParameter(Attribute.LANG);
         String locale;
         switch (language) {
             case "rus":
@@ -45,8 +45,8 @@ public class ChangeLanguageCommand implements Command {
                 locale = "en_US";
         }
 
-        session.setAttribute("locale", locale);
-        Cookie localeCookie = new Cookie("locale", locale);
+        session.setAttribute(Attribute.LOCALE, locale);
+        Cookie localeCookie = new Cookie(Attribute.LOCALE, locale);
         response.addCookie(localeCookie);
         logger.debug(String.format("User successfully changed locale to %s", locale));
         response.sendRedirect(request.getHeader("referer"));

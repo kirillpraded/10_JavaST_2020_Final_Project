@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.writer;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Answer;
@@ -39,17 +40,17 @@ public class AnswerEditCommand implements Command {
 
         Answer answer = new Answer();
         try {
-            String content = request.getParameter("text")
+            String content = request.getParameter(Attribute.TEXT)
                     .replaceAll("<","&lt;")
                     .replaceAll(">", "&gt;");
             answer.setText(content);
-            answer.setId(Long.parseLong(request.getParameter("answer_id")));
+            answer.setId(Long.parseLong(request.getParameter(Attribute.ANSWER_ID)));
 
             User author = new User();
-            author.setId(Long.parseLong(request.getParameter("user_id")));
+            author.setId(Long.parseLong(request.getParameter(Attribute.USER_ID)));
             answer.setAuthor(author);
 
-            String questionId = request.getParameter("question_id");
+            String questionId = request.getParameter(Attribute.QUESTION_ID);
             Question question = new Question();
             question.setId(Long.parseLong(questionId));
             answer.setQuestion(question);
@@ -61,13 +62,13 @@ public class AnswerEditCommand implements Command {
 
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-            request.setAttribute("message", "database.error");
-            request.setAttribute("answer", answer);
+            request.setAttribute(Attribute.MESSAGE, "database.error");
+            request.setAttribute(Attribute.ANSWER, answer);
             request.getRequestDispatcher("WEB-INF/jsp/answer-edit.jsp").forward(request, response);
         } catch (ValidationException e) {
             logger.debug("Answer text isn't valid");
             e.getAttributes().forEach(request::setAttribute);
-            request.setAttribute("answer", answer);
+            request.setAttribute(Attribute.ANSWER, answer);
             request.getRequestDispatcher("WEB-INF/jsp/answer-edit.jsp").forward(request, response);
         }
 

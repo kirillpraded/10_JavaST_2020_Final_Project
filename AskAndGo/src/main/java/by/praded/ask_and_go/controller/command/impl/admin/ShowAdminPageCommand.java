@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.admin;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Category;
@@ -43,9 +44,9 @@ public class ShowAdminPageCommand implements Command {
         UserService userService = factory.takeService(Service.USER);
         try {
             List<User> users = userService.findAllUsers();
-            request.setAttribute("users", users);
+            request.setAttribute(Attribute.ADMIN_USERS, users);
             List<Category> categories = categoryService.findAllCategories();
-            request.setAttribute("categories", categories);
+            request.setAttribute(Attribute.ADMIN_CATEGORIES, categories);
             request.getRequestDispatcher("/WEB-INF/jsp/admin.jsp").forward(request, response);
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);

@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.writer;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Question;
@@ -36,11 +37,11 @@ public class QuestionEditCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String title = request.getParameter("title")
+        String title = request.getParameter(Attribute.TITLE)
                 .replaceAll("<","&lt;")
                 .replaceAll(">", "&gt;");
 
-        String text = request.getParameter("text")
+        String text = request.getParameter(Attribute.TEXT)
                 .replaceAll("<","&lt;")
                 .replaceAll(">", "&gt;");
 
@@ -48,9 +49,9 @@ public class QuestionEditCommand implements Command {
         try {
             question.setTitle(title);
             question.setText(text);
-            question.setId(Long.parseLong(request.getParameter("question_id")));
+            question.setId(Long.parseLong(request.getParameter(Attribute.QUESTION_ID)));
             User author = new User();
-            author.setId(Long.parseLong(request.getParameter("user_id")));
+            author.setId(Long.parseLong(request.getParameter(Attribute.USER_ID)));
             question.setAuthor(author);
             QuestionService questionService = ServiceProvider.getInstance().takeService(Service.QUESTION);
             questionService.updateQuestion(question);
@@ -58,7 +59,7 @@ public class QuestionEditCommand implements Command {
             response.sendRedirect(request.getContextPath() + "/question?question_id=" + question.getId());
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-            request.setAttribute("message", "database.error");
+            request.setAttribute(Attribute.MESSAGE, "database.error");
             forwardBack(request, response, question);
         } catch (ValidationException e) {
             e.getAttributes().forEach(request::setAttribute);
@@ -70,7 +71,7 @@ public class QuestionEditCommand implements Command {
     private void forwardBack(HttpServletRequest request, HttpServletResponse response,
                              Question question) throws ServletException, IOException {
 
-        request.setAttribute("question", question);
+        request.setAttribute(Attribute.QUESTION, question);
         request.getRequestDispatcher("/WEB-INF/jsp/question-edit.jsp").forward(request, response);
     }
 }

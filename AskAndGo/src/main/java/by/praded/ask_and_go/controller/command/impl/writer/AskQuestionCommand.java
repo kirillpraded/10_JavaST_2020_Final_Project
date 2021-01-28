@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.writer;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Category;
@@ -55,19 +56,19 @@ public class AskQuestionCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        String title = request.getParameter("title")
+        String title = request.getParameter(Attribute.TITLE)
                 .replaceAll("<","&lt;")
                 .replaceAll(">", "&gt;");
 
-        String content = request.getParameter("text")
+        String content = request.getParameter(Attribute.TEXT)
                 .replaceAll("<","&lt;")
                 .replaceAll(">", "&gt;");
 
-        String tags = request.getParameter("tags")
+        String tags = request.getParameter(Attribute.TAGS)
                 .replaceAll("<","&lt;")
                 .replaceAll(">", "&gt;");
 
-        String categoryId = request.getParameter("category_id");
+        String categoryId = request.getParameter(Attribute.CATEGORY_ID);
 
         TagService tagService = ServiceProvider.getInstance().takeService(Service.TAG);
         List<Tag> tagsList = tagService.parseTags(tags);
@@ -79,7 +80,7 @@ public class AskQuestionCommand implements Command {
             Long categoryIdLong = Long.parseLong(categoryId);
             category.setId(categoryIdLong);
             QuestionService questionService = ServiceProvider.getInstance().takeService(Service.QUESTION);
-            User user = (User) request.getSession().getAttribute("auth_user");
+            User user = (User) request.getSession().getAttribute(Attribute.AUTH_USER);
             Question question = new Question();
             question.setAuthor(user);
             question.setCategory(category);
@@ -93,18 +94,18 @@ public class AskQuestionCommand implements Command {
             response.sendRedirect(request.getContextPath() + "/question?question_id=" + questionId);
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-            request.setAttribute("message", "database.error");
+            request.setAttribute(Attribute.MESSAGE, "database.error");
             forwardBack(request, response, content, title, tags, category);
         } catch (ValidationException e) {
             CategoryService categoryService = ServiceProvider.getInstance().takeService(Service.CATEGORY);
             e.getAttributes().forEach(request::setAttribute);
             try {
                 categoryService.findAllCategories();
-                request.setAttribute("categories", categoryService.findAllCategories());
+                request.setAttribute(Attribute.CATEGORIES, categoryService.findAllCategories());
 
             } catch (ConnectionPoolException | DaoException exc) {
                 logger.error("It's impossible to process request", exc);
-                request.setAttribute("message", "database.error");
+                request.setAttribute(Attribute.MESSAGE, "database.error");
             }
             forwardBack(request, response, content, title, tags, category);
         }
@@ -113,17 +114,17 @@ public class AskQuestionCommand implements Command {
     private void forwardBack(HttpServletRequest request, HttpServletResponse response,
                              String questionText, String questionTitle,
                              String tags, Category category) throws ServletException, IOException {
-        request.setAttribute("text", questionText);
-        request.setAttribute("title", questionTitle);
-        request.setAttribute("tags", tags);
-        request.setAttribute("current_category", category);
+        request.setAttribute(Attribute.TEXT, questionText);
+        request.setAttribute(Attribute.TITLE, questionTitle);
+        request.setAttribute(Attribute.TAGS, tags);
+        request.setAttribute(Attribute.CURRENT_CATEGORY, category);
         request.getRequestDispatcher("/WEB-INF/jsp/ask-form.jsp").forward(request, response);
     }
 
     private String processImage(HttpServletRequest request) throws IOException, ServletException {
         ServletContext servletContext = request.getServletContext();
         String appPath = servletContext.getRealPath("");
-        Part fileToUpload = request.getPart("image");
+        Part fileToUpload = request.getPart(Attribute.IMAGE);
         String[] splitted = fileToUpload.getContentType().split("/");
         if (!splitted[0].equals("image")) {
             return null;

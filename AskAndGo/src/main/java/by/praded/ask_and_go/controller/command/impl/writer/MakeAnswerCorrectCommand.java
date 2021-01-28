@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.writer;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Answer;
 import by.praded.ask_and_go.entity.Question;
@@ -34,8 +35,8 @@ public class MakeAnswerCorrectCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String questionId = request.getParameter("question_id");
-        String answerId = request.getParameter("answer_id");
+        String questionId = request.getParameter(Attribute.QUESTION_ID);
+        String answerId = request.getParameter(Attribute.ANSWER_ID);
         try {
             AnswerService answerService = ServiceProvider.getInstance().takeService(Service.ANSWER);
             Answer answer = new Answer();

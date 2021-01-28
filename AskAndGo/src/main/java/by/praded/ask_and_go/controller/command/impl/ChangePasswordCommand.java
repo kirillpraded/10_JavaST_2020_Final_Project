@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.User;
@@ -35,10 +36,10 @@ public class ChangePasswordCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String oldPassword = request.getParameter("old_password");
-        String newPassword = request.getParameter("new_password");
-        String newPasswordConfirmation = request.getParameter("password_confirm");
-        User user = (User) request.getSession().getAttribute("auth_user");
+        String oldPassword = request.getParameter(Attribute.OLD_PASSWORD);
+        String newPassword = request.getParameter(Attribute.NEW_PASSWORD);
+        String newPasswordConfirmation = request.getParameter(Attribute.PASSWORD_CONFIRM);
+        User user = (User) request.getSession().getAttribute(Attribute.AUTH_USER);
 
         try {
             user.setPassword(oldPassword);
@@ -48,21 +49,21 @@ public class ChangePasswordCommand implements Command {
             response.sendRedirect(request.getContextPath() + "/user?user_id=" + user.getId());
         } catch (BadCredentialsException e) {
             logger.info(String.format("User[%d] entered wrong password.", user.getId()));
-            forwardBack(request, response, user, "password_error", "password.wrong");
+            forwardBack(request, response, user, Attribute.PASSWORD_ERROR, "password.wrong");
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-            forwardBack(request, response, user, "error_msg", "database.error");
+            forwardBack(request, response, user, Attribute.ERROR_MSG, "database.error");
         } catch (ValidationException e) {
             logger.debug("Validation exception");
             e.getAttributes().forEach(request::setAttribute);
-            request.setAttribute("user", user);
+            request.setAttribute(Attribute.USER, user);
             request.getRequestDispatcher("/WEB-INF/jsp/personal-edit.jsp").forward(request, response);
         }
     }
 
     private void forwardBack(HttpServletRequest request, HttpServletResponse response,
                              User user, String attrName, String attrValue) throws ServletException, IOException {
-        request.setAttribute("user", user);
+        request.setAttribute(Attribute.USER, user);
         request.setAttribute(attrName, attrValue);
         request.getRequestDispatcher("/WEB-INF/jsp/personal-edit.jsp").forward(request, response);
     }

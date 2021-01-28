@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.User;
@@ -35,8 +36,8 @@ public class LoginCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        String username = request.getParameter(Attribute.USERNAME);
+        String password = request.getParameter(Attribute.PASSWORD);
 
         ServiceProvider factory = ServiceProvider.getInstance();
         UserService userService = factory.takeService(Service.USER);
@@ -44,7 +45,7 @@ public class LoginCommand implements Command {
             User user = userService.authenticate(username, password);
 
             HttpSession session = request.getSession();
-            session.setAttribute("auth_user", user);
+            session.setAttribute(Attribute.AUTH_USER, user);
 
             logger.info(String.format("User[%d] successfully signed in.", user.getId()));
             if (Objects.nonNull(session.getAttribute("referer"))) {
@@ -63,8 +64,8 @@ public class LoginCommand implements Command {
 
     private void forwardBack(HttpServletRequest request, HttpServletResponse response,
                              String username, String message) throws ServletException, IOException {
-        request.setAttribute("message", message);
-        request.setAttribute("username", username);
+        request.setAttribute(Attribute.MESSAGE, message);
+        request.setAttribute(Attribute.USERNAME, username);
         request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
     }
 

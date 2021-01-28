@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.moderator;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Role;
 import by.praded.ask_and_go.entity.User;
@@ -34,7 +35,7 @@ public class BlockAuthorCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String userId = request.getParameter("user_id");
+        String userId = request.getParameter(Attribute.USER_ID);
         try {
             User user = new User();
             user.setId(Long.parseLong(userId));
@@ -45,7 +46,7 @@ public class BlockAuthorCommand implements Command {
             logger.info(String.format("User[%d] successfully blocked.", user.getId()));
             response.sendRedirect(request.getContextPath()
                     + "/question?question_id="
-                    + request.getParameter("question_id"));
+                    + request.getParameter(Attribute.QUESTION_ID));
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "error-page.server");

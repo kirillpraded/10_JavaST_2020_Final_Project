@@ -10,8 +10,9 @@ import java.io.IOException;
 /**
  * @author Kiryl Praded
  * 16.12.2020
- *
+ * <p>
  * Command serves to process the display welcome page request.
+ * @see Command
  */
 public class WelcomePageCommand implements Command {
     /**

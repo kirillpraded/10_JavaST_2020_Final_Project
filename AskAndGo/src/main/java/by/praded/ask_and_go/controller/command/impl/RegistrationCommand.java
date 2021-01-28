@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.service.Service;
@@ -33,12 +34,12 @@ public class RegistrationCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String passwordConfirmation = request.getParameter("password_confirm");
-        String email = request.getParameter("email");
-        String firstName = request.getParameter("first_name");
-        String lastName = request.getParameter("last_name");
+        String username = request.getParameter(Attribute.USERNAME);
+        String password = request.getParameter(Attribute.PASSWORD);
+        String passwordConfirmation = request.getParameter(Attribute.PASSWORD_CONFIRM);
+        String email = request.getParameter(Attribute.EMAIL);
+        String firstName = request.getParameter(Attribute.FIRST_NAME);
+        String lastName = request.getParameter(Attribute.LAST_NAME);
 
         ServiceProvider factory = ServiceProvider.getInstance();
         UserService userService = factory.takeService(Service.USER);
@@ -48,12 +49,12 @@ public class RegistrationCommand implements Command {
             response.sendRedirect(request.getContextPath() + "/login");
         } catch (ConnectionPoolException e) {
             logger.error("It's impossible to process request", e);
-            request.setAttribute("message", "database.error");
+            request.setAttribute(Attribute.MESSAGE, "database.error");
             setAttributes(request, username, firstName, lastName, email);
             request.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(request, response);
         } catch (DaoException e) {
             logger.debug(String.format("User '%s' already exists", username));
-            request.setAttribute("username_error", "username.exists");
+            request.setAttribute(Attribute.USERNAME_ERROR, "username.exists");
             setAttributes(request, username, firstName, lastName, email);
             request.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(request, response);
         } catch (ValidationException e) {
@@ -65,10 +66,10 @@ public class RegistrationCommand implements Command {
     }
 
     private void setAttributes(HttpServletRequest req, String username, String firstName, String lastName, String email) {
-        req.setAttribute("username", username);
-        req.setAttribute("first_name", firstName);
-        req.setAttribute("last_name", lastName);
-        req.setAttribute("email", email);
+        req.setAttribute(Attribute.USERNAME, username);
+        req.setAttribute(Attribute.FIRST_NAME, firstName);
+        req.setAttribute(Attribute.LAST_NAME, lastName);
+        req.setAttribute(Attribute.EMAIL, email);
     }
 
 }

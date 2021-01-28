@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.User;
@@ -48,10 +49,10 @@ public class UpdateProfileImageCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("auth_user");
+        User user = (User) session.getAttribute(Attribute.AUTH_USER);
         ServletContext servletContext = request.getServletContext();
-        String appPath = servletContext.getRealPath("");// получение относительного пути в приложении, чтобы томкат видел
-        Part fileToUpload = request.getPart("image"); // This class represents a part or form item that was received within a multipart/form-data POST request.
+        String appPath = servletContext.getRealPath("");
+        Part fileToUpload = request.getPart(Attribute.IMAGE);
         String[] splitted = fileToUpload.getContentType().split("/");
         if (!splitted[0].equals("image")) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);

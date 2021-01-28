@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Question;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
@@ -34,13 +35,13 @@ public class FindQuestionsCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String query = request.getParameter("q").replaceAll("<","&lt;")
-                .replaceAll(">", "&gt;");;
+        String query = request.getParameter(Attribute.QUERY).replaceAll("<","&lt;")
+                .replaceAll(">", "&gt;");
         try {
             QuestionService questionService = ServiceProvider.getInstance().takeService(Service.QUESTION);
 
             Set<Question> questions = questionService.searchQuestionsByTitle(query);
-            request.setAttribute("questions", questions);
+            request.setAttribute(Attribute.QUESTIONS, questions);
             request.getRequestDispatcher("/WEB-INF/jsp/questions.jsp").forward(request, response);
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);

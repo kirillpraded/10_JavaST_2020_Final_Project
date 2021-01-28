@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.admin;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Category;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
@@ -35,7 +36,7 @@ public class ShowCategoryEditPageCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
-            Long id = Long.parseLong(request.getParameter("category_id"));
+            Long id = Long.parseLong(request.getParameter(Attribute.CATEGORY_ID));
 
             CategoryService categoryService = ServiceProvider
                     .getInstance()
@@ -43,8 +44,8 @@ public class ShowCategoryEditPageCommand implements Command {
 
             Category category = categoryService.findCategoryById(id);
 
-            request.setAttribute("category", category);
-            request.setAttribute("categories", categoryService.findAllCategories());
+            request.setAttribute(Attribute.CATEGORY, category);
+            request.setAttribute(Attribute.CATEGORIES, categoryService.findAllCategories());
 
             request.getRequestDispatcher("/WEB-INF/jsp/category-edit.jsp").forward(request, response);
         } catch (ConnectionPoolException | DaoException e) {

@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.writer;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Answer;
@@ -35,10 +36,10 @@ public class ShowAnswerEditFormCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
-            Long answerId = Long.parseLong(request.getParameter("answer_id"));
+            Long answerId = Long.parseLong(request.getParameter(Attribute.ANSWER_ID));
             AnswerService answerService = ServiceProvider.getInstance().takeService(Service.ANSWER);
             Answer answer = answerService.findAnswerById(answerId);
-            request.setAttribute("answer", answer);
+            request.setAttribute(Attribute.ANSWER, answer);
             request.getRequestDispatcher("/WEB-INF/jsp/answer-edit.jsp").forward(request, response);
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);

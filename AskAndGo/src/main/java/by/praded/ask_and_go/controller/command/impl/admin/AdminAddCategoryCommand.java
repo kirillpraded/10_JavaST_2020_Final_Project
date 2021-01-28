@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.admin;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Category;
@@ -37,8 +38,8 @@ public class AdminAddCategoryCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
-        String categoryParentId = request.getParameter("parent_id");
-        String categoryName = request.getParameter("name")
+        String categoryParentId = request.getParameter(Attribute.PARENT_ID);
+        String categoryName = request.getParameter(Attribute.NAME)
                 .replaceAll("<","&lt;")
                 .replaceAll(">", "&gt;");
         try {
@@ -55,7 +56,7 @@ public class AdminAddCategoryCommand implements Command {
 
             categoryService.createCategory(category);
             logger.info(String.format("Category successfully created \"%s\"", categoryName));
-            request.setAttribute("category_success", "category.add-success");
+            request.setAttribute(Attribute.CATEGORY_SUCCESS, "category.add-success");
 
         } catch (ConnectionPoolException e) {
             logger.error("It's impossible to process request", e);
@@ -65,8 +66,8 @@ public class AdminAddCategoryCommand implements Command {
             putErrorAttributes(request, categoryName, "category.exists", categoryParentId);
         } catch (ValidationException e) {
             logger.debug(String.format("Category name isn't valid: %s", categoryName));
-            request.setAttribute("category_name", categoryName);
-            request.setAttribute("parentId", categoryParentId);
+            request.setAttribute(Attribute.CATEGORY_NAME, categoryName);
+            request.setAttribute(Attribute.PARENT_IDENTITY, categoryParentId);
             e.getAttributes().forEach(request::setAttribute);
         }
         request.getRequestDispatcher("/admin").forward(request, response);
@@ -75,8 +76,8 @@ public class AdminAddCategoryCommand implements Command {
 
     private void putErrorAttributes(HttpServletRequest request, String categoryName,
                                     String error, String categoryId) {
-        request.setAttribute("category_error", error);
-        request.setAttribute("category_name", categoryName);
-        request.setAttribute("parentId", categoryId);
+        request.setAttribute(Attribute.CATEGORY_ERROR, error);
+        request.setAttribute(Attribute.CATEGORY_NAME, categoryName);
+        request.setAttribute(Attribute.PARENT_IDENTITY, categoryId);
     }
 }

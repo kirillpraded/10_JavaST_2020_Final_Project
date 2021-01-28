@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.command.impl.writer;
 
 import by.praded.ask_and_go.controller.command.Command;
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.Category;
@@ -40,9 +41,9 @@ public class ShowAskPageCommand implements Command {
             CategoryService categoryService = ServiceProvider.getInstance().takeService(Service.CATEGORY);
 
             List<Category> categories = categoryService.findAllCategories();
-            request.setAttribute("categories", categories);
+            request.setAttribute(Attribute.CATEGORIES, categories);
 
-            String categoryId = request.getParameter("category_id");
+            String categoryId = request.getParameter(Attribute.CATEGORY_ID);
             if (Objects.nonNull(categoryId) && !categoryId.isEmpty()) {
                 Long categoryIdLong = Long.parseLong(categoryId);
                 Category category = categoryService.findCategoryById(categoryIdLong);
@@ -52,9 +53,9 @@ public class ShowAskPageCommand implements Command {
                 // если !category.subcategries.isEmpty() - запретить пользователю добавлять в эту категорию
 
                 if (category.getSubcategories().isEmpty()) {
-                    request.setAttribute("current_category", category);
+                    request.setAttribute(Attribute.CURRENT_CATEGORY, category);
                 } else {
-                    request.setAttribute("error_category_message", "category.error");
+                    request.setAttribute(Attribute.ERROR_CATEGORY_MESSAGE, "category.error");
                 }
             }
             request.getRequestDispatcher("/WEB-INF/jsp/ask-form.jsp").forward(request, response);
