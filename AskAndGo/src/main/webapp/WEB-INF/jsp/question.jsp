@@ -98,7 +98,10 @@
                         <h5 class="card-title">${question.author.username} ${question.date}</h5>
                         <p class="card-text"><b>${question.title}</b></p>
                         <p class="card-text">${question.text}</p>
-                        <p class="card-text"><small class="text-muted">tags: <c:forEach var="tag" items="${question.tags}"><a href="<c:url value="/search?q=${tag.text}"/>">${tag.text}</a> </c:forEach></small></p>
+                        <p class="card-text">
+                            <small class="text-muted"><c:forEach var="tag" items="${question.tags}"><a href="<c:url value="/search?q=${tag.text}"/>">${tag.text}</a> </c:forEach>
+                            </small>
+                        </p>
                         <c:if test="${not empty question.imageName}">
                             <details>
                                 <summary><fmt:message key="screenshot"

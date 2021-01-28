@@ -3,6 +3,8 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix = "custom" uri = "/WEB-INF/tld/custom.tld"%>
+
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="property.text" var="rb"/>
 <html>
@@ -29,37 +31,7 @@
 <jsp:include page="parts/navbar.jsp"/>
 
 <div class="container">
-
-    <c:choose>
-        <c:when test="${not empty error}">
-            <h2>${error}</h2>
-        </c:when>
-        <c:when test="${pageContext.errorData.statusCode eq 404}">
-            <h2>${pageContext.errorData.statusCode}</h2>
-            <p>${pageContext.errorData.requestURI}</p>
-            <p><fmt:message key="error-page.not-found"
-                             bundle="${ rb }"/></p>
-        </c:when>
-        <c:when test="${pageContext.errorData.statusCode eq 403}">
-            <h2>${pageContext.errorData.statusCode}</h2>
-            <p>${pageContext.errorData.requestURI}</p>
-
-
-            <p><fmt:message key="${msg}"
-                             bundle="${ rb }"/></p>
-        </c:when>
-        <c:when test="${pageContext.errorData.statusCode eq 500}">
-            <h2>${pageContext.errorData.statusCode}</h2>
-            <p>
-                <fmt:message key="error-page.server" bundle="${ rb }"/>
-            </p>
-        </c:when>
-        <c:otherwise>
-            <h3>
-                <fmt:message key="error-page.server" bundle="${ rb }"/>
-            </h3>
-        </c:otherwise>
-    </c:choose>
+    <custom:error code="${pageContext.errorData.statusCode}"/>
 </div>
 
 <jsp:include page="parts/footer.jsp"/>
