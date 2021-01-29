@@ -9,16 +9,18 @@
 <head>
     <meta charset="utf-8">
 
-    <title>${category.name}</title>
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-          crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <title>
+        <c:choose>
+            <c:when test="${not empty category.name}">
+                ${category.name}
+            </c:when>
+            <c:otherwise>
+                <fmt:message key="navbar.search"
+                             bundle="${ rb }"/>
+            </c:otherwise>
+        </c:choose>
+    </title>
+    <tags:styles />
     <style>
         .p {
             width: 250px;
@@ -26,18 +28,12 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
-        .under {
-            margin-top: 6%;
-        }
-
     </style>
-    <!-- Custom styles for navbar -->
-    <link href="<c:url value="/css/navbar-top-fixed.css" />" rel="stylesheet">
+
 </head>
 <body>
 <jsp:include page="parts/navbar.jsp"/>
-<div class="container under card-columns">
+<div class="container card-columns">
     <c:if test="${not empty category}">
         <div>
             <tags:parent-recursive category="${category}"/>
