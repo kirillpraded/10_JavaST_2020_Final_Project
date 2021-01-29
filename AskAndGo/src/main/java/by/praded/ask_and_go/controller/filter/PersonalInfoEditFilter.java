@@ -1,5 +1,6 @@
 package by.praded.ask_and_go.controller.filter;
 
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.entity.User;
 
 import javax.servlet.*;
@@ -31,15 +32,12 @@ public class PersonalInfoEditFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) req;
         HttpServletResponse httpResponse = (HttpServletResponse) resp;
         HttpSession session = httpRequest.getSession();
-        User user = (User) session.getAttribute("auth_user");
-        //почему тут ту стринг вместо парсинга лонга:
-        // 1) сэкономим памяти, благодаря пулу строк
-        // 2) сэкономим ресурсов, не будем тратиться на парсинг
-        // 3) исключим возможность выпадения NumberFormatException
-        if (user.getId().toString().equals(httpRequest.getParameter("user_id"))) {
+        User user = (User) session.getAttribute(Attribute.AUTH_USER);
+
+        if (user.getId().toString().equals(httpRequest.getParameter(Attribute.USER_ID))) {
             chain.doFilter(httpRequest, httpResponse);
         } else {
-            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Доступ запрещен");
+            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
     }
 

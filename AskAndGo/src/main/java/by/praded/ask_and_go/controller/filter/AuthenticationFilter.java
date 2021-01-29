@@ -1,5 +1,7 @@
 package by.praded.ask_and_go.controller.filter;
 
+import by.praded.ask_and_go.controller.util.Attribute;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +33,7 @@ public class AuthenticationFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         HttpSession session = httpRequest.getSession();
 
-        if (session.getAttribute("auth_user") != null) {
+        if (session.getAttribute(Attribute.AUTH_USER) != null) {
             chain.doFilter(servletRequest, servletResponse);
         } else {
             session.setAttribute("referer", httpRequest.getHeader("referer"));

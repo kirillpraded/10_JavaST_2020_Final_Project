@@ -1,5 +1,6 @@
 package by.praded.ask_and_go.controller.filter;
 
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.entity.Role;
 import by.praded.ask_and_go.entity.User;
 import by.praded.ask_and_go.service.util.UserValidator;
@@ -35,7 +36,7 @@ public class ModeratorAuthorizationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) req;
         HttpServletResponse httpResponse = (HttpServletResponse) resp;
         HttpSession session = httpRequest.getSession();
-        User user = (User) session.getAttribute("auth_user");
+        User user = (User) session.getAttribute(Attribute.AUTH_USER);
         if (UserValidator.validateRole(user, Role.MODERATOR)) {
             chain.doFilter(httpRequest, httpResponse);
         } else {

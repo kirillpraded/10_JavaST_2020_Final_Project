@@ -1,5 +1,6 @@
 package by.praded.ask_and_go.controller.filter;
 
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.entity.Role;
 import by.praded.ask_and_go.entity.User;
 import by.praded.ask_and_go.service.util.UserValidator;
@@ -34,11 +35,9 @@ public class MessageActionFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
-        User user = (User) request.getSession().getAttribute("auth_user");
-        Long userId = Long.parseLong(request.getParameter("user_id")); //айди автора ответа
+        User user = (User) request.getSession().getAttribute(Attribute.AUTH_USER);
+        Long userId = Long.parseLong(request.getParameter(Attribute.USER_ID)); //айди автора ответа
         //удалить вопрос или ответ - сам пользователь или модер
-        //закрыть вопрос - сам пользователь
-        //пометить ответ на вопрос как верный - автор вопроса
         if (user.getId().equals(userId) || UserValidator.validateRole(user, Role.MODERATOR)) {
             chain.doFilter(req, resp);
         } else {

@@ -1,6 +1,7 @@
 package by.praded.ask_and_go.controller.filter;
 
 
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.entity.Role;
 import by.praded.ask_and_go.entity.User;
 import by.praded.ask_and_go.service.util.UserValidator;
@@ -37,11 +38,11 @@ public class AdminAuthorizationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         HttpSession session = httpRequest.getSession();
-        User user = (User) session.getAttribute("auth_user");
+        User user = (User) session.getAttribute(Attribute.AUTH_USER);
         if (UserValidator.validateRole(user, Role.ADMIN)) {
             chain.doFilter(httpRequest, httpResponse);
         } else {
-            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Доступ запрещен");
+            httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
     }
 }

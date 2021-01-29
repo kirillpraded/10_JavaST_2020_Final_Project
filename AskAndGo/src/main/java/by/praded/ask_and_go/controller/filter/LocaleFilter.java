@@ -1,5 +1,7 @@
 package by.praded.ask_and_go.controller.filter;
 
+import by.praded.ask_and_go.controller.util.Attribute;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
@@ -30,22 +32,22 @@ public class LocaleFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpSession session = request.getSession();
         String locale = null;
-        if (Objects.isNull(session.getAttribute("locale"))) {
+        if (Objects.isNull(session.getAttribute(Attribute.LOCALE))) {
             Cookie[] cookies = request.getCookies();
             //нужна условная конструкция тк из инкогнито не отправляются куки и выпадает экспшн
             if (Objects.nonNull(cookies)) {
                 for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("locale")) {
+                    if (cookie.getName().equals(Attribute.LOCALE)) {
                         locale = cookie.getValue();
                         break;
                     }
                 }
             }
             if (Objects.nonNull(locale)) {
-                session.setAttribute("locale", locale);
+                session.setAttribute(Attribute.LOCALE, locale);
             } else {
                 //default language - english
-                session.setAttribute("locale", "en_US");
+                session.setAttribute(Attribute.LOCALE, "en_US");
             }
         }
         chain.doFilter(req, resp);

@@ -1,5 +1,6 @@
 package by.praded.ask_and_go.controller.filter;
 
+import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.entity.User;
 
 import javax.servlet.*;
@@ -29,9 +30,9 @@ public class UserIdentityFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
-        User user = (User) request.getSession().getAttribute("auth_user");
+        User user = (User) request.getSession().getAttribute(Attribute.AUTH_USER);
 
-        if (user.getId().toString().equals(request.getParameter("user_id"))) {
+        if (user.getId().toString().equals(request.getParameter(Attribute.USER_ID))) {
             chain.doFilter(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
