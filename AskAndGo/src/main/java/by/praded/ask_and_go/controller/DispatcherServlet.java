@@ -4,7 +4,7 @@ import by.praded.ask_and_go.controller.command.Command;
 import by.praded.ask_and_go.controller.command.CommandProvider;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.pool.ConnectionPool;
-import by.praded.ask_and_go.service.util.ResourceManager;
+import by.praded.ask_and_go.util.ResourceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

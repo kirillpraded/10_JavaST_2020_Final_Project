@@ -46,7 +46,9 @@ public class BlockAuthorCommand implements Command {
             logger.info(String.format("User[%d] successfully blocked.", user.getId()));
             response.sendRedirect(request.getContextPath()
                     + "/question?question_id="
-                    + request.getParameter(Attribute.QUESTION_ID));
+                    + request.getParameter(Attribute.QUESTION_ID)
+                    + "&page="
+                    + request.getParameter(Attribute.PAGE));
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "error-page.server");

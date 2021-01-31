@@ -9,7 +9,7 @@ import java.util.Objects;
  * Validator class for categories.
  * @see by.praded.ask_and_go.entity.Category
  */
-public class CategoryValidator {
+public final class CategoryValidator {
     /**
      * Method to validate name of category.
      *

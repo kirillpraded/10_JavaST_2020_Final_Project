@@ -1,4 +1,4 @@
-package by.praded.ask_and_go.service.util;
+package by.praded.ask_and_go.util;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
  * <p>
  * Resource manager to get access to resources.
  */
-public class ResourceManager {
+public final class ResourceManager {
     /**
      * Name of configuration file.
      */
@@ -23,13 +23,13 @@ public class ResourceManager {
     /**
      * Bundle to access configuration {@link ResourceManager#APPLICATION_CONFIGURATION_FILE}.
      */
-    private final ResourceBundle configuration;
+    private final ResourceBundle CONFIGURATION;
 
     /**
      * Private class constructor.
      */
     private ResourceManager() {
-        configuration = ResourceBundle.getBundle(APPLICATION_CONFIGURATION_FILE, Locale.getDefault());
+        CONFIGURATION = ResourceBundle.getBundle(APPLICATION_CONFIGURATION_FILE, Locale.getDefault());
     }
 
     /**
@@ -45,12 +45,12 @@ public class ResourceManager {
     }
 
     /**
-     * Method to find configuration value from {@link ResourceManager#configuration}
+     * Method to find configuration value from {@link ResourceManager#CONFIGURATION}
      *
      * @param name - name of configuration parameter to find.
      * @return value of config parameter.
      */
     public String findConfigurationValue(String name) {
-        return configuration.getString(name);
+        return CONFIGURATION.getString(name);
     }
 }

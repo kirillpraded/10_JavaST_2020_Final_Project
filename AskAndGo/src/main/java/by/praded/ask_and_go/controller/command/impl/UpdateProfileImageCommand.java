@@ -8,7 +8,7 @@ import by.praded.ask_and_go.entity.User;
 import by.praded.ask_and_go.service.Service;
 import by.praded.ask_and_go.service.UserService;
 import by.praded.ask_and_go.service.impl.ServiceProvider;
-import by.praded.ask_and_go.service.util.ResourceManager;
+import by.praded.ask_and_go.util.ResourceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

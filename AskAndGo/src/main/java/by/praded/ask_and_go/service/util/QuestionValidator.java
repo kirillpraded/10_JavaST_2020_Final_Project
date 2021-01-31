@@ -9,7 +9,7 @@ import java.util.Objects;
  * Validator class for questions.
  * @see by.praded.ask_and_go.entity.Question
  */
-public class QuestionValidator {
+public final class QuestionValidator {
     /**
      * Method to validate title of question.
      *

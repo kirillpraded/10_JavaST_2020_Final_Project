@@ -39,7 +39,10 @@ public class MakeQuestionClosedCommand implements Command {
             QuestionService questionService = ServiceProvider.getInstance().takeService(Service.QUESTION);
             questionService.updateQuestionIsClosed(questionIdLong);
             logger.info(String.format("Question[%s] is closed.", questionId));
-            response.sendRedirect(request.getContextPath() + "/question?question_id=" + questionId);
+            response.sendRedirect(request.getContextPath()
+                    + "/question?question_id="
+                    + questionId + "&page="
+                    + request.getParameter(Attribute.PAGE));
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "error-page.server");

@@ -23,12 +23,13 @@ public interface QuestionService extends AbstractService {
      * Declaration of method to find question by identity.
      *
      * @param id - identity of the question to find by.
+     * @param page - page to find answers.
      * @return question found by identity.
      * @throws ConnectionPoolException  - can be thrown on interaction exception with connection.
      * @throws DaoException             - can be thrown on interaction exception with dao.
      * @throws EntityNotExistsException - can be thrown if question with such identity don't exists.
      */
-    Question findQuestionById(Long id) throws ConnectionPoolException, EntityNotExistsException, DaoException;
+    Question findQuestionById(Long id, int page) throws ConnectionPoolException, EntityNotExistsException, DaoException;
 
     /**
      * Declaration of method to find questions by identity of category.

@@ -56,7 +56,11 @@ public class QuestionEditCommand implements Command {
             QuestionService questionService = ServiceProvider.getInstance().takeService(Service.QUESTION);
             questionService.updateQuestion(question);
             logger.info(String.format("Question[%d] is updated", question.getId()));
-            response.sendRedirect(request.getContextPath() + "/question?question_id=" + question.getId());
+            response.sendRedirect(request.getContextPath()
+                    + "/question?question_id="
+                    + question.getId()
+                    + "&page="
+                    + request.getParameter(Attribute.PAGE));
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
             request.setAttribute(Attribute.MESSAGE, "database.error");

@@ -53,7 +53,11 @@ public class AddAnswerCommand implements Command {
 
             answerService.addAnswer(answer);
             logger.info(String.format("Answer to the question %d successfully added", questionId));
-            response.sendRedirect(request.getContextPath() + "/question?question_id=" + questionId);
+            response.sendRedirect(request.getContextPath()
+                    + "/question?question_id="
+                    + questionId
+                    + "&page="
+                    + request.getParameter(Attribute.PAGE));
 
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);

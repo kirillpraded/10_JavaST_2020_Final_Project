@@ -18,11 +18,12 @@ public interface AnswerDao extends Dao<Answer> {
      * Declaration of method to find list of answers by the question identity.
      *
      * @param questionId - identity of the question
+     * @param page - number of page
      * @return list of answers found by the question id.
      * @throws DaoException - may occurs during the reading.
      * @see by.praded.ask_and_go.entity.Question
      */
-    List<Answer> findByQuestionId(Long questionId) throws DaoException;
+    List<Answer> findByQuestionId(Long questionId, int page) throws DaoException;
 
     /**
      * Declaration of the method to make answer correct.

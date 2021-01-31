@@ -92,7 +92,8 @@
             </div>
             <div class="form-group">
                 <fmt:message key="screenshot"
-                             bundle="${ rb }"/><input type="file" name="image"/>
+                             bundle="${ rb }"/><input type="file" name="image" multiple="false"
+                                                      accept="image/jpeg,image/png,image/gif,image/tiff,image/jpg, image/bmp"/>
             </div>
 
             <div class="form-group">

@@ -17,7 +17,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="https://vk.com/ind_k"><fmt:message key="navbar.contact"
+                    <a class="nav-link" href="https://www.linkedin.com/in/kirylpraded/"><fmt:message key="navbar.contact"
                                                                                  bundle="${ rb }"/></a>
                 </li>
                 <c:if test="${not empty sessionScope.auth_user}">

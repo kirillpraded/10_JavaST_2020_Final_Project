@@ -12,7 +12,14 @@
 
     <title>${question.title}</title>
 
-<tags:styles />
+    <tags:styles />
+    <style>
+        .center {
+            margin-left: auto;
+            margin-right: auto;
+            width: 6em
+        }
+    </style>
 
 </head>
 <body>
@@ -23,6 +30,8 @@
         <form action="<c:url value="/close"/>" method="post">
             <input type="hidden" name="question_id" value="${question.id}">
             <input type="hidden" value="${question.author.id}" name="user_id">
+            <input type="hidden" value="${param.page}" name="page">
+
             <button type="submit" class="btn btn-primary"><fmt:message key="question.close"
                                                                        bundle="${ rb }"/></button>
         </form>
@@ -53,6 +62,7 @@
 
                             <form action="<c:url value="/edit-question"/>" method="get">
                                 <input type="hidden" name="question_id" value="${question.id}">
+                                <input type="hidden" value="${param.page}" name="page">
                                 <input type="hidden" name="user_id" value="${question.author.id}">
                                 <button value="submit" class="btn btn-primary"><fmt:message key="edit"
                                                                                             bundle="${ rb }"/></button>
@@ -78,6 +88,7 @@
                             <form action="<c:url value="/block-author"/>" method="post">
                                 <input type="hidden" value="${question.author.id}" name="user_id">
                                 <input type="hidden" value="${question.id}" name="question_id">
+                                <input type="hidden" value="${param.page}" name="page">
                                 <button type="submit" class="btn btn-danger"><fmt:message key="author.block"
                                                                                           bundle="${ rb }"/></button>
                             </form>
@@ -86,7 +97,7 @@
                     </div>
 
                     <div class="card-body">
-                        <h5 class="card-title">${question.author.username} ${question.date}</h5>
+                        <h5 class="card-title"><a href="<c:url value="/user?user_id=${question.author.id}"/>">${question.author.username}</a> ${question.date}</h5>
                         <p class="card-text"><b>${question.title}</b></p>
                         <p class="card-text">${question.text}</p>
                         <p class="card-text">
@@ -107,6 +118,7 @@
         </div>
     </div>
 </div>
+<hr>
 <c:forEach var="answer" items="${question.answers}">
     <div class="container">
         <div class="card mb-3" style="max-width: 1000px;">
@@ -135,6 +147,7 @@
 
                             <form action="<c:url value="/edit-answer"/>" method="get">
                                 <input type="hidden" name="answer_id" value="${answer.id}">
+                                <input type="hidden" value="${param.page}" name="page">
                                 <input type="hidden" name="user_id" value="${answer.author.id}">
                                 <button value="submit" class="btn btn-primary"><fmt:message key="edit"
                                                                                             bundle="${ rb }"/></button>
@@ -148,6 +161,7 @@
 
                             <form class="m-1" action="<c:url value="/block-author"/>" method="post">
                                 <input type="hidden" value="${answer.author.id}" name="user_id">
+                                <input type="hidden" value="${param.page}" name="page">
                                 <input type="hidden" value="${question.id}" name="question_id">
                                 <button type="submit" class="btn btn-danger"><fmt:message key="author.block"
                                                                                           bundle="${ rb }"/></button>
@@ -166,6 +180,8 @@
                                     <input type="hidden" name="question_id" value="${question.id}">
                                     <input type="hidden" name="answer_id" value="${answer.id}">
                                     <input type="hidden" name="user_id" value="${question.author.id}">
+                                    <input type="hidden" value="${param.page}" name="page">
+
                                     <button type="submit" class="btn btn-secondary"><fmt:message
                                             key="mark.correct"
                                             bundle="${ rb }"/></button>
@@ -176,7 +192,7 @@
                     </div>
 
                     <div class="card-body">
-                        <h5 class="card-title">${answer.author.username} ${question.date}</h5>
+                        <h5 class="card-title"><a href="<c:url value="/user?user_id=${answer.author.id}"/>">${answer.author.username}</a> ${answer.date}</h5>
                         <p class="card-text">${answer.text}</p>
                     </div>
                 </div>
@@ -184,12 +200,38 @@
         </div>
     </div>
 </c:forEach>
+<div class="center">
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li class="page-item <c:if test="${param.page eq 1}">disabled</c:if>">
+                <a class="page-link" href="<c:url value="/question?question_id=${question.id}&page=${param.page - 1}"/>" tabindex="-1"
+                        <c:if test="${param.page eq 1}">
+                            aria-disabled="true"
+                        </c:if>
+                >Previous</a>
+            </li>
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#">${param.page}</a>
+            </li>
+
+            <li class="page-item <c:if test="${question.answers.size() < 5}">disabled</c:if>">
+                <a class="page-link" href="<c:url value="/question?question_id=${question.id}&page=${param.page + 1}" />"
+                        <c:if test="${question.answers.size() < 5}">
+                            aria-disabled="true"
+                        </c:if>
+                >Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
 <c:if test="${not question.closed and sessionScope.auth_user.role.name() eq 'WRITER'}">
     <div class="container">
         <div class="mb-3" style="max-width: 1000px;">
             <div class="row g-0">
                 <div class="col-md-8">
                     <form accept-charset="UTF-8" id="addAnswerForm" action="<c:url value="/answer"/>" method="post">
+                        <input type="hidden" value="${param.page}" name="page">
+
                         <div class="m-3">
                             <input type="hidden" value="${question.id}" id="question_id" name="question_id">
                             <div class="form-group">
@@ -201,11 +243,11 @@
                                 <fmt:message key="answer.text"
                                              bundle="${ rb }"/>
                                 <textarea class="form-control <c:if test="${not empty error_message}">is-invalid</c:if>"
-                                        rows="12"
-                                        name="text"
-                                        id="text"
-                                        aria-label="With textarea"
-                                        required>${answer_text}</textarea>
+                                          rows="12"
+                                          name="text"
+                                          id="text"
+                                          aria-label="With textarea"
+                                          required>${answer_text}</textarea>
                                 <c:choose>
                                     <c:when test="${not empty requestScope.error_message}">
                                         <div class="invalid-feedback">
@@ -220,8 +262,7 @@
                                 </c:choose>
 
                             </div>
-                            <button type="submit" class="btn btn-secondary btn-sm mt-2"><fmt:message key="submit"
-                                                                                                     bundle="${ rb }"/></button>
+                            <button type="submit" class="btn btn-secondary btn-sm mt-2"><fmt:message key="submit" bundle="${ rb }"/></button>
                         </div>
                     </form>
                 </div>

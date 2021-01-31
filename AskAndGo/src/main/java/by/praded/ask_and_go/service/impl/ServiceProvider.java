@@ -17,7 +17,7 @@ public class ServiceProvider {
     /**
      * Instance of service provider for singleton.
      */
-    private static final ServiceProvider instance = new ServiceProvider();
+    private static final ServiceProvider INSTANCE = new ServiceProvider();
 
     /**
      * Service repository that keeps all services.
@@ -40,10 +40,10 @@ public class ServiceProvider {
     /**
      * Static method to get instance of the Service provider.
      *
-     * @return value of the field {@link ServiceProvider#instance}
+     * @return value of the field {@link ServiceProvider#INSTANCE}
      */
     public static ServiceProvider getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     /**

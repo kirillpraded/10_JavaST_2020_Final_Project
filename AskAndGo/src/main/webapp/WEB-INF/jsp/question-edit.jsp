@@ -70,6 +70,7 @@
             </div>
             <input type="hidden" name="user_id" value="${requestScope.question.author.id}">
             <input type="hidden" name="question_id" value="${requestScope.question.id}">
+            <input type="hidden" value="${param.page}" name="page">
 
             <button type="submit" class="btn btn-primary"><fmt:message key="submit"
                                                                        bundle="${ rb }"/></button>

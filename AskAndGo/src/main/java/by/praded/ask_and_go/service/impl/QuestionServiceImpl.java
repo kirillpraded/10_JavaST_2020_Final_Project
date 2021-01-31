@@ -31,13 +31,14 @@ public class QuestionServiceImpl implements QuestionService {
      * Method to find question by identity.
      *
      * @param id - identity of the question to find by.
+     * @param page - page of answers to find by.
      * @return question found by identity.
      * @throws ConnectionPoolException  - can be thrown on interaction exception with connection.
      * @throws DaoException             - can be thrown on interaction exception with dao.
      * @throws EntityNotExistsException - can be thrown if question with such identity don't exists.
      */
     @Override
-    public Question findQuestionById(Long id) throws ConnectionPoolException, EntityNotExistsException, DaoException {
+    public Question findQuestionById(Long id, int page) throws ConnectionPoolException, EntityNotExistsException, DaoException {
         Transaction transaction = null;
         try {
             transaction = TransactionFactory.getInstance().createTransaction(true);
@@ -55,7 +56,7 @@ public class QuestionServiceImpl implements QuestionService {
             Question question = optionalQuestion.get();
             question.setAuthor(userDao.read(question.getAuthor().getId()));
 
-            List<Answer> answers = answerDao.findByQuestionId(id);
+            List<Answer> answers = answerDao.findByQuestionId(id, page);
 
             for (Answer answer : answers) {
                 answer.setAuthor(userDao.read(answer.getAuthor().getId()));

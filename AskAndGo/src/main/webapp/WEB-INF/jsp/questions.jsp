@@ -58,7 +58,7 @@
                     <h5 class="card-title"><c:if test="${question.containsCorrectAnswer}">&#9989; </c:if>${question.title}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">${question.author.username}</h6>
                     <p class="p card-text">${question.text}</p>
-                    <a href="<c:url value="/question?question_id=${question.id}"/>" class="card-link"><fmt:message
+                    <a href="<c:url value="/question?question_id=${question.id}&page=1"/>" class="card-link"><fmt:message
                             key="question.view"
                             bundle="${ rb }"/></a>
                 </div>

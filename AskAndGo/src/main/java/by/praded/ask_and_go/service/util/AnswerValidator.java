@@ -9,7 +9,7 @@ import java.util.Objects;
  * Validator class for answers.
  * @see by.praded.ask_and_go.entity.Answer
  */
-public class AnswerValidator {
+public final class AnswerValidator {
 
     /**
      * Method to validate text of answer.

@@ -14,7 +14,7 @@ import by.praded.ask_and_go.service.Service;
 import by.praded.ask_and_go.service.TagService;
 import by.praded.ask_and_go.service.exception.ValidationException;
 import by.praded.ask_and_go.service.impl.ServiceProvider;
-import by.praded.ask_and_go.service.util.ResourceManager;
+import by.praded.ask_and_go.util.ResourceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -91,7 +91,7 @@ public class AskQuestionCommand implements Command {
 
             long questionId = questionService.createQuestion(question);
             logger.info(String.format("Question %d successfully added", questionId));
-            response.sendRedirect(request.getContextPath() + "/question?question_id=" + questionId);
+            response.sendRedirect(request.getContextPath() + "/question?question_id=" + questionId + "&page=1");
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
             request.setAttribute(Attribute.MESSAGE, "database.error");

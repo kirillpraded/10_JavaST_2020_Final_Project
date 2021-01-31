@@ -12,7 +12,7 @@ import java.util.Objects;
  * Validator class for users.
  * @see User
  */
-public class UserValidator {
+public final class UserValidator {
     /**
      * Method to validate user password.
      *

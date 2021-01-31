@@ -6,7 +6,7 @@ package by.praded.ask_and_go.controller.util;
  * <p>
  * Class that keeps names of all attributes.
  */
-public class Attribute {
+public final class Attribute {
     public static final String AUTH_USER = "auth_user";
 
     public static final String NAME = "name";
@@ -14,6 +14,7 @@ public class Attribute {
     public static final String PARENT_IDENTITY = "parentId";
     public static final String ID = "id";
 
+    public static final String PAGE = "page";
 
     public static final String QUESTION_ID = "question_id";
     public static final String USER_ID = "user_id";

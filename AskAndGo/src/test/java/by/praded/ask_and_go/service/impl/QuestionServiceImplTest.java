@@ -29,7 +29,7 @@ public class QuestionServiceImplTest {
     @Test(description = "test successful find by identity", dataProvider = "existingQuestionsData")
     public void findQuestionByIdTest(Long qid) {
         try {
-            questionService.findQuestionById(qid);
+            questionService.findQuestionById(qid, 1);
             Assert.assertTrue(true);
         } catch (DaoException | ConnectionPoolException | EntityNotExistsException e) {
             Assert.fail();
@@ -39,7 +39,7 @@ public class QuestionServiceImplTest {
     @Test(description = "test find by identity expect EntityNotExistsException", dataProvider = "nonExistingIdentities")
     public void findQuestionByIdExpectEntityNotExistsExceptionTest(Long id) {
         try {
-            questionService.findQuestionById(id);
+            questionService.findQuestionById(id, 1);
             Assert.fail();
         } catch (EntityNotExistsException e) {
             Assert.assertTrue(true);

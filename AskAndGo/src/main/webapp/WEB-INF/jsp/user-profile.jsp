@@ -29,7 +29,8 @@
                 <c:if test="${user.id eq sessionScope.auth_user.id}">
 
                     <form action="<c:url value="/update-image"/>" enctype="multipart/form-data" method="post">
-                        <input type="file" name="image" required/>
+                        <input type="file" name="image"  multiple="false"
+                               accept="image/jpeg,image/png,image/gif,image/tiff,image/jpg, image/bmp" required/>
                         <button type="submit" class="btn btn-secondary"><fmt:message key="profile.image"
                                                                                      bundle="${ rb }"/></button>
                     </form>

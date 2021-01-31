@@ -26,6 +26,7 @@ import java.util.List;
  * @see Answer
  */
 public class AnswerDaoImpl extends BaseDaoImpl implements AnswerDao {
+    private static final int AMOUNT_ON_PAGE = 5;
 
     /**
      * Dao class constructor to create dao only with connection.
@@ -137,18 +138,21 @@ public class AnswerDaoImpl extends BaseDaoImpl implements AnswerDao {
      * Method to find list of answers by the question identity.
      *
      * @param questionId - identity of the question
+     * @param page - amount of times to offset results.
      * @return list of answers found by the question id.
      * @throws DaoException - may occurs during the reading.
      * @see by.praded.ask_and_go.entity.Question
      */
     @Override
-    public List<Answer> findByQuestionId(Long questionId) throws DaoException {
+    public List<Answer> findByQuestionId(Long questionId, int page) throws DaoException {
         String sql = "SELECT `id`, `text`, `user_id`, `answer_date`, `is_correct`" +
-                " FROM `answer` WHERE `question_id` = ?";
+                " FROM `answer` WHERE `question_id` = ? LIMIT ? OFFSET ?";
         List<Answer> answers = new ArrayList<>();
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, questionId);
+            statement.setInt(2, AMOUNT_ON_PAGE);
+            statement.setInt(3, AMOUNT_ON_PAGE * (page - 1));
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Answer answer = new Answer();

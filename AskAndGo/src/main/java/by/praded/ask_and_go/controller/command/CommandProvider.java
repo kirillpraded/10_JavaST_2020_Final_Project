@@ -24,38 +24,38 @@ public class CommandProvider {
     /**
      * Map of commands for `GET` requests.
      */
-    private final Map<String, Command> getRepository = new HashMap<>();
+    private final Map<String, Command> GET_REPO = new HashMap<>();
     /**
-     * Map of commands for `post` requests.
+     * Map of commands for `POST` requests.
      */
-    private final Map<String, Command> postRepository = new HashMap<>();
+    private final Map<String, Command> POST_REPO = new HashMap<>();
 
     /**
      * Class constructor. Initializes repositories of commands.
      */
     private CommandProvider() {
-        getRepository.put("/user-edit", new ShowPersonalInfoEditPageCommand());
-        getRepository.put("/main", new WelcomePageCommand());
-        getRepository.put("/login", new ShowLoginPageCommand());
-        getRepository.put("/logout", new LogoutCommand());
-        getRepository.put("/registration", new ShowRegistrationPageCommand());
-        getRepository.put("/admin", new ShowAdminPageCommand());
-        getRepository.put("/admin/edit-user", new ShowUserEditPageCommand());
+        GET_REPO.put("/user-edit", new ShowPersonalInfoEditPageCommand());
+        GET_REPO.put("/main", new WelcomePageCommand());
+        GET_REPO.put("/login", new ShowLoginPageCommand());
+        GET_REPO.put("/logout", new LogoutCommand());
+        GET_REPO.put("/registration", new ShowRegistrationPageCommand());
+        GET_REPO.put("/admin", new ShowAdminPageCommand());
+        GET_REPO.put("/admin/edit-user", new ShowUserEditPageCommand());
         //getRepository.put("/admin/delete-user", new AdminUserDeleteCommand());
-        getRepository.put("/admin/edit-category", new ShowCategoryEditPageCommand());
-        getRepository.put("/categories", new ShowCategoriesCommand());
-        getRepository.put("/questions", new ShowQuestionsInCategoryCommand());
-        getRepository.put("/ask", new ShowAskPageCommand());
-        getRepository.put("/question", new ShowQuestionCommand());
-        getRepository.put("/edit-question", new ShowQuestionEditFormCommand());
-        getRepository.put("/edit-answer", new ShowAnswerEditFormCommand());
-        getRepository.put("/user", new ShowUserCommand());
-        getRepository.put("/search", new FindQuestionsCommand());
-        postRepository.put("/delete-answer", new DeleteAnswerCommand());
-        postRepository.put("/login", new LoginCommand());
-        postRepository.put("/user-edit", new PersonalInfoEditCommand());
-        postRepository.put("/change-password", new ChangePasswordCommand());
-        postRepository.put("/update-image", new UpdateProfileImageCommand());
+        GET_REPO.put("/admin/edit-category", new ShowCategoryEditPageCommand());
+        GET_REPO.put("/categories", new ShowCategoriesCommand());
+        GET_REPO.put("/questions", new ShowQuestionsInCategoryCommand());
+        GET_REPO.put("/ask", new ShowAskPageCommand());
+        GET_REPO.put("/question", new ShowQuestionCommand());
+        GET_REPO.put("/edit-question", new ShowQuestionEditFormCommand());
+        GET_REPO.put("/edit-answer", new ShowAnswerEditFormCommand());
+        GET_REPO.put("/user", new ShowUserCommand());
+        GET_REPO.put("/search", new FindQuestionsCommand());
+        POST_REPO.put("/delete-answer", new DeleteAnswerCommand());
+        POST_REPO.put("/login", new LoginCommand());
+        POST_REPO.put("/user-edit", new PersonalInfoEditCommand());
+        POST_REPO.put("/change-password", new ChangePasswordCommand());
+        POST_REPO.put("/update-image", new UpdateProfileImageCommand());
         /*
 
             зачем в пост репозитории команда которая обрабатывает гет запрос
@@ -65,31 +65,31 @@ public class CommandProvider {
             в результате которого сервлет не может найти в пост репозитории такого урла
             и выкидывает 500(у меня в приложении сделано под 404) ошибку.
          */
-        postRepository.put("/admin", new ShowAdminPageCommand());
+        POST_REPO.put("/admin", new ShowAdminPageCommand());
         /*
             по этой же причине нужен пост маппинг на /question.
             Если пользователь пытается добавить некорректный
             ответ(не проходит валидацию) нужно форварднуть его и передать некоторые параметры
             что в целом невозможно без форварда
          */
-        postRepository.put("/lang", new ChangeLanguageCommand());
-        postRepository.put("/question", new ShowQuestionCommand());
-        postRepository.put("/update-correct", new MakeAnswerCorrectCommand());
-        postRepository.put("/close", new MakeQuestionClosedCommand());
-        postRepository.put("/delete-question", new DeleteQuestionCommand());
-        postRepository.put("/block-author", new BlockAuthorCommand());
-        postRepository.put("/registration", new RegistrationCommand());
-        postRepository.put("/admin/edit-user", new UpdateUserRoleCommand());
-        postRepository.put("/admin/delete-user", new UserDeleteCommand());
-        postRepository.put("/admin/add-category", new AdminAddCategoryCommand());
-        postRepository.put("/admin/delete-category", new AdminDeleteCategoryCommand());
-        postRepository.put("/admin/edit-category", new AdminEditCategoryCommand());
-        postRepository.put("/categories", new ShowCategoriesCommand());
-        postRepository.put("/questions", new ShowQuestionsInCategoryCommand());
-        postRepository.put("/ask", new AskQuestionCommand());
-        postRepository.put("/answer", new AddAnswerCommand());
-        postRepository.put("/edit-question", new QuestionEditCommand());
-        postRepository.put("/edit-answer", new AnswerEditCommand());
+        POST_REPO.put("/lang", new ChangeLanguageCommand());
+        POST_REPO.put("/question", new ShowQuestionCommand());
+        POST_REPO.put("/update-correct", new MakeAnswerCorrectCommand());
+        POST_REPO.put("/close", new MakeQuestionClosedCommand());
+        POST_REPO.put("/delete-question", new DeleteQuestionCommand());
+        POST_REPO.put("/block-author", new BlockAuthorCommand());
+        POST_REPO.put("/registration", new RegistrationCommand());
+        POST_REPO.put("/admin/edit-user", new UpdateUserRoleCommand());
+        POST_REPO.put("/admin/delete-user", new UserDeleteCommand());
+        POST_REPO.put("/admin/add-category", new AdminAddCategoryCommand());
+        POST_REPO.put("/admin/delete-category", new AdminDeleteCategoryCommand());
+        POST_REPO.put("/admin/edit-category", new AdminEditCategoryCommand());
+        POST_REPO.put("/categories", new ShowCategoriesCommand());
+        POST_REPO.put("/questions", new ShowQuestionsInCategoryCommand());
+        POST_REPO.put("/ask", new AskQuestionCommand());
+        POST_REPO.put("/answer", new AddAnswerCommand());
+        POST_REPO.put("/edit-question", new QuestionEditCommand());
+        POST_REPO.put("/edit-answer", new AnswerEditCommand());
     }
 
     /**
@@ -111,7 +111,7 @@ public class CommandProvider {
      * @return the {@link Command} implementation corresponding to the {@code name}
      */
     public Command provideGetCommand(String name) {
-        return getRepository.get(name);
+        return GET_REPO.get(name);
     }
 
     /**
@@ -121,6 +121,6 @@ public class CommandProvider {
      * @return the {@link Command} implementation corresponding to the {@code name}
      */
     public Command providePostCommand(String name) {
-        return postRepository.get(name);
+        return POST_REPO.get(name);
     }
 }

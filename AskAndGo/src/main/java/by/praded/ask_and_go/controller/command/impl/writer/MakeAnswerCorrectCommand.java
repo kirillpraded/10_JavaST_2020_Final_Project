@@ -49,7 +49,11 @@ public class MakeAnswerCorrectCommand implements Command {
             answer.setId(Long.parseLong(answerId));
             answerService.updateAnswerIsCorrect(answer);
             logger.info(String.format("Answer[%s] is updated correct.", answerId));
-            response.sendRedirect(request.getContextPath() + "/question?question_id=" + questionId);
+            response.sendRedirect(request.getContextPath()
+                    + "/question?question_id="
+                    + questionId
+                    + "&page="
+                    + request.getParameter(Attribute.PAGE));
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "error-page.server");

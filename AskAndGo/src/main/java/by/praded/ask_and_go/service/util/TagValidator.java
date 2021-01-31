@@ -11,7 +11,7 @@ import java.util.List;
  * Validator class for tags.
  * @see Tag
  */
-public class TagValidator {
+public final class TagValidator {
 
     /**
      * Method to validate name of tag.

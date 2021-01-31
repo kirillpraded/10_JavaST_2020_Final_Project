@@ -32,7 +32,7 @@ public class ConnectionPool {
     /**
      * Lock for locking from threads, when one thread is in.
      */
-    private final Lock lock;
+    private final Lock LOCK;
     /**
      * URL to connect to database.
      */
@@ -62,7 +62,7 @@ public class ConnectionPool {
      * Class constructor.
      */
     private ConnectionPool() {
-        lock = new ReentrantLock();
+        LOCK = new ReentrantLock();
     }
 
     /**
@@ -111,7 +111,7 @@ public class ConnectionPool {
      * @throws ConnectionPoolException - may be thrown if there is an error communicating with the pool.
      */
     public Connection takeConnection() throws ConnectionPoolException {
-        lock.lock();
+        LOCK.lock();
         WrappedConnection connection;
         try {
             if (!freeConnections.isEmpty()) {
@@ -122,10 +122,10 @@ public class ConnectionPool {
                 connection = freeConnections.take();
             }
             takenConnections.add(connection);
-            lock.unlock();
+            LOCK.unlock();
         } catch (InterruptedException | SQLException e) {
             logger.error("Failed to take connection from queue.", e);
-            lock.unlock();
+            LOCK.unlock();
             Thread.currentThread().interrupt();
             /*
             InterruptedExceptions should either be rethrown - immediately or after cleaning up the method's state

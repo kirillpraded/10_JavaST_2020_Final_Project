@@ -30,7 +30,7 @@
             <div class="form-group">
                 Text
                 <textarea class="form-control <c:if test="${not empty requestScope.message}">is-invalid</c:if>" rows="12" name="text" id="text"
-                              aria-label="With textarea" required>${requestScope.answer.text}</textarea>
+                          aria-label="With textarea" required>${requestScope.answer.text}</textarea>
                 <c:choose>
                     <c:when test="${not empty requestScope.message}">
                         <div class="invalid-feedback">
@@ -48,8 +48,10 @@
             <input type="hidden" name="user_id" value="${requestScope.answer.author.id}">
             <input type="hidden" name="answer_id" value="${requestScope.answer.id}">
             <input type="hidden" name="question_id" value="${requestScope.answer.question.id}">
+            <input type="hidden" value="${param.page}" name="page">
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary"><fmt:message key="submit"
+                                                                       bundle="${ rb }"/></button>
         </form>
     </div>
 </div>

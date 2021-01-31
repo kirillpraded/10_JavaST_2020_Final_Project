@@ -38,7 +38,7 @@ public class ShowQuestionEditFormCommand implements Command {
         try {
             Long questionId = Long.parseLong(request.getParameter(Attribute.QUESTION_ID));
             QuestionService questionService = ServiceProvider.getInstance().takeService(Service.QUESTION);
-            Question question = questionService.findQuestionById(questionId);
+            Question question = questionService.findQuestionById(questionId, 1);
 
             request.setAttribute(Attribute.QUESTION, question);
             request.getRequestDispatcher("/WEB-INF/jsp/question-edit.jsp").forward(request, response);
