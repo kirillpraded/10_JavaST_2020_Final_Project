@@ -1,12 +1,21 @@
 CREATE DATABASE `askandgo_db` DEFAULT CHARACTER SET utf8;
 
-CREATE USER 'kirill'@'localhost' IDENTIFIED BY 'kirillpraded';
+CREATE USER 'person'@'localhost' IDENTIFIED BY 'kirillpraded';
+GRANT SELECT,INSERT,UPDATE,DELETE
+    ON askandgo_db.*
+    TO 'CREATE USER ''person''@''localhost'' IDENTIFIED BY ''kirillpraded'';
 GRANT SELECT,INSERT,UPDATE,DELETE
 ON askandgo_db.*
-TO 'kirill'@'localhost';
+TO ''person''@''localhost'';
 
 GRANT SELECT,INSERT,UPDATE,DELETE
 ON askandgo_db.*
-TO 'kirill'@'%';
+TO ''person''@''localhost'';
+
+FLUSH PRIVILEGES;'@'localhost';
+
+GRANT SELECT,INSERT,UPDATE,DELETE
+    ON askandgo_db.*
+    TO 'person'@'localhost';
 
 FLUSH PRIVILEGES;
