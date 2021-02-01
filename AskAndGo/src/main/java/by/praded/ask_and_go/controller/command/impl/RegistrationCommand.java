@@ -46,7 +46,7 @@ public class RegistrationCommand implements Command {
         try {
             userService.register(username, password, passwordConfirmation, firstName, lastName, email);
             logger.info(String.format("User '%s' successfully registered", username));
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/app/login");
         } catch (ConnectionPoolException e) {
             logger.error("It's impossible to process request", e);
             request.setAttribute(Attribute.MESSAGE, "database.error");

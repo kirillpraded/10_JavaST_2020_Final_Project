@@ -51,7 +51,7 @@ public class LoginCommand implements Command {
             if (Objects.nonNull(session.getAttribute("referer"))) {
                 response.sendRedirect((String) session.getAttribute("referer"));
             } else {
-                response.sendRedirect(request.getContextPath() + "/categories");
+                response.sendRedirect(request.getContextPath() + "/app/categories");
             }
         } catch (BadCredentialsException e) {
             logger.info(String.format("%s tried to sign in with wrong password", username));

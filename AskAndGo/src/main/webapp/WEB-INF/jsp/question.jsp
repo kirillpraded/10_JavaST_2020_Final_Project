@@ -27,7 +27,7 @@
 
 <c:if test="${question.author.id eq sessionScope.auth_user.id and not question.closed}">
     <div class="ml-5">
-        <form action="<c:url value="/close"/>" method="post">
+        <form action="<c:url value="/app/close"/>" method="post">
             <input type="hidden" name="question_id" value="${question.id}">
             <input type="hidden" value="${question.author.id}" name="user_id">
             <input type="hidden" value="${param.page}" name="page">
@@ -60,7 +60,7 @@
                     <div class="mt-1">
                         <c:if test="${sessionScope.auth_user.id eq question.author.id}">
 
-                            <form action="<c:url value="/edit-question"/>" method="get">
+                            <form action="<c:url value="/app/edit-question"/>" method="get">
                                 <input type="hidden" name="question_id" value="${question.id}">
                                 <input type="hidden" value="${param.page}" name="page">
                                 <input type="hidden" name="user_id" value="${question.author.id}">
@@ -72,7 +72,7 @@
                         <c:if test="${question.author.id eq sessionScope.auth_user.id
                                             or sessionScope.auth_user.role.name() eq 'MODERATOR'}">
 
-                            <form action="<c:url value="/delete-question"/>" method="post">
+                            <form action="<c:url value="/app/delete-question"/>" method="post">
                                 <input type="hidden" value="${question.id}" name="question_id">
                                 <input type="hidden" value="${question.author.id}" name="user_id">
                                 <button type="submit" class="btn btn-warning">
@@ -85,7 +85,7 @@
                                     and question.author.role.name() != 'READER'
                                     and question.author.username != sessionScope.auth_user.username}">
 
-                            <form action="<c:url value="/block-author"/>" method="post">
+                            <form action="<c:url value="/app/block-author"/>" method="post">
                                 <input type="hidden" value="${question.author.id}" name="user_id">
                                 <input type="hidden" value="${question.id}" name="question_id">
                                 <input type="hidden" value="${param.page}" name="page">
@@ -97,11 +97,14 @@
                     </div>
 
                     <div class="card-body">
-                        <h5 class="card-title"><a href="<c:url value="/user?user_id=${question.author.id}"/>">${question.author.username}</a> ${question.date}</h5>
+                        <h5 class="card-title"><a href="<c:url value="/app/user?user_id=${question.author.id}"/>">${question.author.username}</a> ${question.date}</h5>
                         <p class="card-text"><b>${question.title}</b></p>
                         <p class="card-text">${question.text}</p>
                         <p class="card-text">
-                            <small class="text-muted"><c:forEach var="tag" items="${question.tags}"><a href="<c:url value="/search?q=${tag.text}"/>">${tag.text}</a> </c:forEach>
+                            <small class="text-muted">
+                                <c:forEach var="tag" items="${question.tags}">
+                                    <a href="<c:url value="/app/search?q=${tag.text}"/>">${tag.text}</a>
+                                </c:forEach>
                             </small>
                         </p>
                         <c:if test="${not empty question.imageName}">
@@ -133,10 +136,11 @@
                         <c:if test="${answer.author.id eq sessionScope.auth_user.id
                                             or sessionScope.auth_user.role.name() eq 'MODERATOR'}">
 
-                            <form class="m-1" action="<c:url value="/delete-answer"/>" method="post">
+                            <form class="m-1" action="<c:url value="/app/delete-answer"/>" method="post">
                                 <input type="hidden" value="${answer.id}" name="answer_id">
                                 <input type="hidden" value="${question.id}" name="question_id">
                                 <input type="hidden" value="${answer.author.id}" name="user_id">
+                                <input type="hidden" value="${param.page}" name="page">
 
                                 <button type="submit" class="btn btn-warning"><fmt:message key="delete"
                                                                                            bundle="${ rb }"/></button>
@@ -145,7 +149,7 @@
                         </c:if>
                         <c:if test="${sessionScope.auth_user.id eq answer.author.id}">
 
-                            <form action="<c:url value="/edit-answer"/>" method="get">
+                            <form action="<c:url value="/app/edit-answer"/>" method="get">
                                 <input type="hidden" name="answer_id" value="${answer.id}">
                                 <input type="hidden" value="${param.page}" name="page">
                                 <input type="hidden" name="user_id" value="${answer.author.id}">
@@ -159,7 +163,7 @@
                                     and answer.author.role.name() != 'READER'
                                     and answer.author.username != sessionScope.auth_user.username}">
 
-                            <form class="m-1" action="<c:url value="/block-author"/>" method="post">
+                            <form class="m-1" action="<c:url value="/app/block-author"/>" method="post">
                                 <input type="hidden" value="${answer.author.id}" name="user_id">
                                 <input type="hidden" value="${param.page}" name="page">
                                 <input type="hidden" value="${question.id}" name="question_id">
@@ -176,7 +180,7 @@
                             <c:when test="${question.author.id eq sessionScope.auth_user.id
                                     and answer.author.id != sessionScope.auth_user.id
                                     and answer.correct eq false}">
-                                <form class="m-1" method="post" action="<c:url value="/update-correct"/>">
+                                <form class="m-1" method="post" action="<c:url value="/app/update-correct"/>">
                                     <input type="hidden" name="question_id" value="${question.id}">
                                     <input type="hidden" name="answer_id" value="${answer.id}">
                                     <input type="hidden" name="user_id" value="${question.author.id}">
@@ -192,7 +196,7 @@
                     </div>
 
                     <div class="card-body">
-                        <h5 class="card-title"><a href="<c:url value="/user?user_id=${answer.author.id}"/>">${answer.author.username}</a> ${answer.date}</h5>
+                        <h5 class="card-title"><a href="<c:url value="/app/user?user_id=${answer.author.id}"/>">${answer.author.username}</a> ${answer.date}</h5>
                         <p class="card-text">${answer.text}</p>
                     </div>
                 </div>
@@ -204,7 +208,7 @@
     <nav aria-label="...">
         <ul class="pagination">
             <li class="page-item <c:if test="${param.page eq 1}">disabled</c:if>">
-                <a class="page-link" href="<c:url value="/question?question_id=${question.id}&page=${param.page - 1}"/>" tabindex="-1"
+                <a class="page-link" href="<c:url value="/app/question?question_id=${question.id}&page=${param.page - 1}"/>" tabindex="-1"
                         <c:if test="${param.page eq 1}">
                             aria-disabled="true"
                         </c:if>
@@ -215,7 +219,7 @@
             </li>
 
             <li class="page-item <c:if test="${question.answers.size() < 5}">disabled</c:if>">
-                <a class="page-link" href="<c:url value="/question?question_id=${question.id}&page=${param.page + 1}" />"
+                <a class="page-link" href="<c:url value="/app/question?question_id=${question.id}&page=${param.page + 1}" />"
                         <c:if test="${question.answers.size() < 5}">
                             aria-disabled="true"
                         </c:if>
@@ -229,7 +233,7 @@
         <div class="mb-3" style="max-width: 1000px;">
             <div class="row g-0">
                 <div class="col-md-8">
-                    <form accept-charset="UTF-8" id="addAnswerForm" action="<c:url value="/answer"/>" method="post">
+                    <form accept-charset="UTF-8" id="addAnswerForm" action="<c:url value="/app/answer"/>" method="post">
                         <input type="hidden" value="${param.page}" name="page">
 
                         <div class="m-3">

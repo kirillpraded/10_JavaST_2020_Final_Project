@@ -50,7 +50,7 @@ public class MakeAnswerCorrectCommand implements Command {
             answerService.updateAnswerIsCorrect(answer);
             logger.info(String.format("Answer[%s] is updated correct.", answerId));
             response.sendRedirect(request.getContextPath()
-                    + "/question?question_id="
+                    + "/app/question?question_id="
                     + questionId
                     + "&page="
                     + request.getParameter(Attribute.PAGE));

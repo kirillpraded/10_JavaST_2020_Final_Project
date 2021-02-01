@@ -2,7 +2,11 @@ package by.praded.ask_and_go.controller.filter;
 
 import by.praded.ask_and_go.controller.util.Attribute;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.FilterChain;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

@@ -14,13 +14,16 @@
 
     <servlet-mapping>
         <servlet-name>DispatcherServlet</servlet-name>
+
+        <url-pattern>/app/*</url-pattern>
         <!--
             Есть три варианта:
             1) прописать все урлы, дабы урлы картинок не затрагивались и соответственно
             картинки отображались
             2) Ограничить как нибудь урл паттерны: например, приписать *.html или вначале приписать view/*
             3) Дать доступ всевозможным урлам, но в таком случае картинки отображаться не будут. "/"
-         -->
+
+
         <url-pattern>/update-image</url-pattern>
         <url-pattern>/search</url-pattern>
         <url-pattern>/login</url-pattern>
@@ -49,9 +52,8 @@
         <url-pattern>/user</url-pattern>
         <url-pattern>/user-edit</url-pattern>
         <url-pattern>/change-password</url-pattern>
-        <!-- /p/* допустимо
-        -->
 
+        -->
     </servlet-mapping>
 
 
@@ -80,75 +82,75 @@
 
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
-        <url-pattern>/update-image</url-pattern>
-        <url-pattern>/logout</url-pattern>
-        <url-pattern>/delete-answer</url-pattern>
-        <url-pattern>/edit-question</url-pattern>
-        <url-pattern>/edit-answer</url-pattern>
-        <url-pattern>/admin</url-pattern>
-        <url-pattern>/admin/edit-user</url-pattern>
-        <url-pattern>/admin/edit-category</url-pattern>
-        <url-pattern>/admin/delete-user</url-pattern>
-        <url-pattern>/admin/add-category</url-pattern>
-        <url-pattern>/admin/delete-category</url-pattern>
-        <url-pattern>/ask</url-pattern>
-        <url-pattern>/question</url-pattern>
-        <url-pattern>/update-correct</url-pattern>
-        <url-pattern>/close</url-pattern>
-        <url-pattern>/block-author</url-pattern>
-        <url-pattern>/answer</url-pattern>
-        <url-pattern>/delete-question</url-pattern>
-        <url-pattern>/user</url-pattern>
-        <url-pattern>/user-edit</url-pattern>
-        <url-pattern>/change-password</url-pattern>
+        <url-pattern>/app/update-image</url-pattern>
+        <url-pattern>/app/logout</url-pattern>
+        <url-pattern>/app/delete-answer</url-pattern>
+        <url-pattern>/app/edit-question</url-pattern>
+        <url-pattern>/app/edit-answer</url-pattern>
+        <url-pattern>/app/admin</url-pattern>
+        <url-pattern>/app/admin/edit-user</url-pattern>
+        <url-pattern>/app/admin/edit-category</url-pattern>
+        <url-pattern>/app/admin/delete-user</url-pattern>
+        <url-pattern>/app/admin/add-category</url-pattern>
+        <url-pattern>/app/admin/delete-category</url-pattern>
+        <url-pattern>/app/ask</url-pattern>
+        <url-pattern>/app/question</url-pattern>
+        <url-pattern>/app/update-correct</url-pattern>
+        <url-pattern>/app/close</url-pattern>
+        <url-pattern>/app/block-author</url-pattern>
+        <url-pattern>/app/answer</url-pattern>
+        <url-pattern>/app/delete-question</url-pattern>
+        <url-pattern>/app/user</url-pattern>
+        <url-pattern>/app/user-edit</url-pattern>
+        <url-pattern>/app/change-password</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
         <filter-name>AdminAuthorizationFilter</filter-name>
-        <url-pattern>/admin</url-pattern>
-        <url-pattern>/admin/edit-user</url-pattern>
-        <url-pattern>/admin/edit-category</url-pattern>
-        <url-pattern>/admin/delete-user</url-pattern>
-        <url-pattern>/admin/add-category</url-pattern>
-        <url-pattern>/admin/delete-category</url-pattern>
+        <url-pattern>/app/admin</url-pattern>
+        <url-pattern>/app/admin/edit-user</url-pattern>
+        <url-pattern>/app/admin/edit-category</url-pattern>
+        <url-pattern>/app/admin/delete-user</url-pattern>
+        <url-pattern>/app/admin/add-category</url-pattern>
+        <url-pattern>/app/admin/delete-category</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
         <filter-name>ModeratorAuthorizationFilter</filter-name>
-        <url-pattern>/block-author</url-pattern>
+        <url-pattern>/app/block-author</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
         <filter-name>WriterAuthorizationFilter</filter-name>
-        <url-pattern>/ask</url-pattern>
-        <url-pattern>/answer</url-pattern>
+        <url-pattern>/app/ask</url-pattern>
+        <url-pattern>/app/answer</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
         <filter-name>MessageActionFilter</filter-name>
-        <url-pattern>/delete-question</url-pattern>
-        <url-pattern>/delete-answer</url-pattern>
+        <url-pattern>/app/delete-question</url-pattern>
+        <url-pattern>/app/delete-answer</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
         <filter-name>UserIdentityFilter</filter-name>
-        <url-pattern>/edit-question</url-pattern>
-        <url-pattern>/edit-answer</url-pattern>
-        <url-pattern>/user-edit</url-pattern>
-        <url-pattern>/change-password</url-pattern>
-        <url-pattern>/update-correct</url-pattern>
-        <url-pattern>/close</url-pattern>
+        <url-pattern>/app/edit-question</url-pattern>
+        <url-pattern>/app/edit-answer</url-pattern>
+        <url-pattern>/app/user-edit</url-pattern>
+        <url-pattern>/app/change-password</url-pattern>
+        <url-pattern>/app/update-correct</url-pattern>
+        <url-pattern>/app/close</url-pattern>
 
     </filter-mapping>
 
     <filter-mapping>
         <filter-name>BlockedUserFilter</filter-name>
-        <url-pattern>/edit-question</url-pattern>
-        <url-pattern>/edit-answer</url-pattern>
-        <url-pattern>/delete-answer</url-pattern>
-        <url-pattern>/delete-question</url-pattern>
-        <url-pattern>/ask</url-pattern>
-        <url-pattern>/answer</url-pattern>
+        <url-pattern>/app/edit-question</url-pattern>
+        <url-pattern>/app/edit-answer</url-pattern>
+        <url-pattern>/app/delete-answer</url-pattern>
+        <url-pattern>/app/delete-question</url-pattern>
+        <url-pattern>/app/ask</url-pattern>
+        <url-pattern>/app/answer</url-pattern>
     </filter-mapping>
     <error-page>
         <error-code>404</error-code>

@@ -8,7 +8,7 @@
 <div class="ml-${space}">
     <c:choose>
         <c:when test="${category.subcategories.size() eq 0}">
-            <a href="<c:url value="/questions?category_id=${category.id}"/>">
+            <a href="<c:url value="/app/questions?category_id=${category.id}"/>">
                 <c:out value="${category.name}"/>
             </a>
         </c:when>

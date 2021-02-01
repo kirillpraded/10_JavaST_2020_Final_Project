@@ -59,7 +59,7 @@ public class AnswerEditCommand implements Command {
             answerService.updateAnswerText(answer);
             logger.info(String.format("Answer id=%d successfully updated", answer.getId()));
             response.sendRedirect(request.getContextPath()
-                    + "/question?question_id="
+                    + "/app/question?question_id="
                     + questionId
                     + "&page="
                     + request.getParameter(Attribute.PAGE));
@@ -68,12 +68,12 @@ public class AnswerEditCommand implements Command {
             logger.error("It's impossible to process request", e);
             request.setAttribute(Attribute.MESSAGE, "database.error");
             request.setAttribute(Attribute.ANSWER, answer);
-            request.getRequestDispatcher("WEB-INF/jsp/answer-edit.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/answer-edit.jsp").forward(request, response);
         } catch (ValidationException e) {
             logger.debug("Answer text isn't valid");
             e.getAttributes().forEach(request::setAttribute);
             request.setAttribute(Attribute.ANSWER, answer);
-            request.getRequestDispatcher("WEB-INF/jsp/answer-edit.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/answer-edit.jsp").forward(request, response);
         }
 
     }

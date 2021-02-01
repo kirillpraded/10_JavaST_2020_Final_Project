@@ -13,14 +13,8 @@
     <details>
         <summary>
             ${category.name}
-
-
-
-
-
-
                     <div style="display: flex;">
-            <form action="<c:url value="/admin/edit-category"/>" method="get">
+            <form action="<c:url value="/app/admin/edit-category"/>" method="get">
                 <input type="hidden"
                        id="to-edit-id"
                        name="category_id" value="${category.id}">
@@ -28,7 +22,7 @@
                                                                            bundle="${ rb }"/></button>
             </form>
 
-            <form action="<c:url value="/admin/delete-category"/>" method="post">
+            <form action="<c:url value="/app/admin/delete-category"/>" method="post">
                 <input type="hidden"
                        id="to-delete-id"
                        name="category_id" value="${category.id}">

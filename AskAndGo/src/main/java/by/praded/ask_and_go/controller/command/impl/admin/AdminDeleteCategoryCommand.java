@@ -46,7 +46,7 @@ public class AdminDeleteCategoryCommand implements Command {
             logger.error("It's impossible to process request", e);
             request.setAttribute(Attribute.CATEGORY_ERROR, "database.error");
         }
-        request.getRequestDispatcher("/admin").forward(request, response);
+        request.getRequestDispatcher("/app/admin").forward(request, response);
     }
 
 }

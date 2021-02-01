@@ -24,7 +24,7 @@
     <div class="col-md-6 col-md-offset-3">
 
 
-        <form action="<c:url value="/admin/edit-category" />" id="categoryEditForm" method="post" accept-charset="UTF-8">
+        <form action="<c:url value="/app/admin/edit-category" />" id="categoryEditForm" method="post" accept-charset="UTF-8">
             <div class="form-group">
                 <fmt:message key="admin.category.name"
                              bundle="${ rb }"/><input type="text"

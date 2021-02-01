@@ -26,7 +26,7 @@
     <div class="col-md-6 col-md-offset-3">
 
 
-        <form action="<c:url value="/admin/edit-user" />" method="post" accept-charset="UTF-8">
+        <form action="<c:url value="/app/admin/edit-user" />" method="post" accept-charset="UTF-8">
 
             <div class="form-group">
                 ID: <input type="text"

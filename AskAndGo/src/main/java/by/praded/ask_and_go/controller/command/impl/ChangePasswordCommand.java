@@ -46,7 +46,7 @@ public class ChangePasswordCommand implements Command {
             UserService userService = ServiceProvider.getInstance().takeService(Service.USER);
             userService.changePassword(user, newPassword, newPasswordConfirmation);
             logger.info(String.format("User[%d] changed password", user.getId()));
-            response.sendRedirect(request.getContextPath() + "/user?user_id=" + user.getId());
+            response.sendRedirect(request.getContextPath() + "/app/user?user_id=" + user.getId());
         } catch (BadCredentialsException e) {
             logger.info(String.format("User[%d] entered wrong password.", user.getId()));
             forwardBack(request, response, user, Attribute.PASSWORD_ERROR, "password.wrong");

@@ -94,7 +94,7 @@
                             </td>
 
                             <td>
-                                <form action="<c:url value="/admin/edit-user" />" method="get">
+                                <form action="<c:url value="/app/admin/edit-user" />" method="get">
                                     <input type="hidden"
                                            id="to-edit-id"
                                            name="id" value="${user.id}">
@@ -102,7 +102,7 @@
                                         <fmt:message key="edit" bundle="${ rb }"/>
                                     </button>
                                 </form>
-                                <form action="<c:url value="/admin/delete-user" />" method="post">
+                                <form action="<c:url value="/app/admin/delete-user" />" method="post">
                                     <input type="hidden"
                                            id="to-delete-id"
                                            name="id" value="${user.id}">
@@ -124,9 +124,11 @@
 
         <div class="tab-pane fade" id="categories">
             <h4 class="mt-2"><fmt:message key="admin.categories.list" bundle="${ rb }"/></h4>
+
             <c:if test="${not empty requestScope.category_success}">
-                <div class="alert alert-success" role="alert"><fmt:message key="${category_success}"
-                                                                           bundle="${ rb }"/></div>
+                <div class="alert alert-success" role="alert">
+                    <fmt:message key="${category_success}" bundle="${ rb }"/>
+                </div>
             </c:if>
 
 
@@ -138,7 +140,7 @@
                 </c:forEach>
             </div>
 
-            <form action="<c:url value="/admin/add-category" />" id="categoryAddForm"method="POST" accept-charset="UTF-8">
+            <form action="<c:url value="/app/admin/add-category" />" id="categoryAddForm"method="POST" accept-charset="UTF-8">
 
                 <div class="form-group">
                     <label for="parent_id"></label>

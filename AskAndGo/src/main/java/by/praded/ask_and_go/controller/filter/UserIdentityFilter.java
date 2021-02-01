@@ -3,7 +3,11 @@ package by.praded.ask_and_go.controller.filter;
 import by.praded.ask_and_go.controller.util.Attribute;
 import by.praded.ask_and_go.entity.User;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.FilterChain;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -28,7 +28,7 @@
                      style="max-height: 155px; max-width: 155px;" alt="...">
                 <c:if test="${user.id eq sessionScope.auth_user.id}">
 
-                    <form action="<c:url value="/update-image"/>" enctype="multipart/form-data" method="post">
+                    <form action="<c:url value="/app/update-image"/>" enctype="multipart/form-data" method="post">
                         <input type="file" name="image"  multiple="false"
                                accept="image/jpeg,image/png,image/gif,image/tiff,image/jpg, image/bmp" required/>
                         <button type="submit" class="btn btn-secondary"><fmt:message key="profile.image"
@@ -48,7 +48,7 @@
                                                  bundle="${ rb }"/>: ${user.regDate}</p>
                 </div>
                 <c:if test="${user.id eq sessionScope.auth_user.id}">
-                    <a href="<c:url value="/user-edit?user_id=${user.id}" />">
+                    <a href="<c:url value="/app/user-edit?user_id=${user.id}" />">
 
                         <button type="button" class="btn btn-primary"><fmt:message key="profile.update"
                                                                                    bundle="${ rb }"/></button>

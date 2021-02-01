@@ -41,11 +41,11 @@ public class DeleteQuestionCommand implements Command {
 
             questionService.deleteQuestion(questionIdLong);
             logger.info(String.format("Question[%s] deleted.", questionId));
-            response.sendRedirect(request.getContextPath() + "/categories");
+            response.sendRedirect(request.getContextPath() + "/app/categories");
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
             request.setAttribute(Attribute.MESSAGE, "database.error");
-            request.getRequestDispatcher("/question").forward(request, response);
+            request.getRequestDispatcher("/app/question").forward(request, response);
         }
     }
 }

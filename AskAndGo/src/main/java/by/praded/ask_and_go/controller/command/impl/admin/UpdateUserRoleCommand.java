@@ -53,7 +53,7 @@ public class UpdateUserRoleCommand implements Command {
             logger.error("It's impossible to process request", e);
             request.setAttribute(Attribute.MSG_USER_ERROR, "database.error");
         }
-        request.getRequestDispatcher("/admin").forward(request, response);
+        request.getRequestDispatcher("/app/admin").forward(request, response);
     }
 
 }

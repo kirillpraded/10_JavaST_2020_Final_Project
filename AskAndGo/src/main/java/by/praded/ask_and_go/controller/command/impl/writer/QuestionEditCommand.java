@@ -57,7 +57,7 @@ public class QuestionEditCommand implements Command {
             questionService.updateQuestion(question);
             logger.info(String.format("Question[%d] is updated", question.getId()));
             response.sendRedirect(request.getContextPath()
-                    + "/question?question_id="
+                    + "/app/question?question_id="
                     + question.getId()
                     + "&page="
                     + request.getParameter(Attribute.PAGE));

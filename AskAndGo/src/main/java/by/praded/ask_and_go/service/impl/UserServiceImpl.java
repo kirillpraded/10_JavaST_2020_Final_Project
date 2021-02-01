@@ -15,6 +15,7 @@ import by.praded.ask_and_go.service.exception.BadCredentialsException;
 import by.praded.ask_and_go.service.exception.EntityNotExistsException;
 import by.praded.ask_and_go.service.exception.ValidationException;
 import by.praded.ask_and_go.service.util.UserValidator;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.HashMap;

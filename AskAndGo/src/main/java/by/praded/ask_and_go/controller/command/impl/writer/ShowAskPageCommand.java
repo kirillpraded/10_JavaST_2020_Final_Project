@@ -66,7 +66,5 @@ public class ShowAskPageCommand implements Command {
             logger.error("It's impossible to process request", e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "error-page.server");
         }
-
-
     }
 }

@@ -77,7 +77,7 @@ public class UpdateProfileImageCommand implements Command {
 
                 logger.info(String.format("User[%d] successfully updated profile image", user.getId()));
                 user.setProfileImage(fileName);
-                response.sendRedirect(request.getContextPath() + "/user?user_id=" + user.getId());
+                response.sendRedirect(request.getContextPath() + "/app/user?user_id=" + user.getId());
             } catch (ConnectionPoolException | DaoException e) {
                 logger.error("It's impossible to update user image in database", e);
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "database.error");

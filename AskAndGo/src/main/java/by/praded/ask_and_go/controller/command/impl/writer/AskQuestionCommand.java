@@ -91,7 +91,7 @@ public class AskQuestionCommand implements Command {
 
             long questionId = questionService.createQuestion(question);
             logger.info(String.format("Question %d successfully added", questionId));
-            response.sendRedirect(request.getContextPath() + "/question?question_id=" + questionId + "&page=1");
+            response.sendRedirect(request.getContextPath() + "/app/question?question_id=" + questionId + "&page=1");
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
             request.setAttribute(Attribute.MESSAGE, "database.error");

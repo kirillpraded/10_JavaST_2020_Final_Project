@@ -70,7 +70,7 @@ public class AdminAddCategoryCommand implements Command {
             request.setAttribute(Attribute.PARENT_IDENTITY, categoryParentId);
             e.getAttributes().forEach(request::setAttribute);
         }
-        request.getRequestDispatcher("/admin").forward(request, response);
+        request.getRequestDispatcher("/app/admin").forward(request, response);
 
     }
 

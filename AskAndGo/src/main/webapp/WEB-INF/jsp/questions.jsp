@@ -37,7 +37,7 @@
     <c:if test="${not empty category}">
         <div>
             <tags:parent-recursive category="${category}"/>
-            <form action="<c:url value="ask"/>" accept-charset="UTF-8">
+            <form action="<c:url value="/app/ask"/>" accept-charset="UTF-8">
                 <input type="hidden" id="category_id" name="category_id" value="${category.id}">
                 <button type="submit" class="btn btn-primary"><fmt:message key="question.ask"
                                                                            bundle="${ rb }"/></button>
@@ -58,7 +58,7 @@
                     <h5 class="card-title"><c:if test="${question.containsCorrectAnswer}">&#9989; </c:if>${question.title}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">${question.author.username}</h6>
                     <p class="p card-text">${question.text}</p>
-                    <a href="<c:url value="/question?question_id=${question.id}&page=1"/>" class="card-link"><fmt:message
+                    <a href="<c:url value="/app/question?question_id=${question.id}&page=1"/>" class="card-link"><fmt:message
                             key="question.view"
                             bundle="${ rb }"/></a>
                 </div>

@@ -28,7 +28,7 @@
                                                                           bundle="${ rb }"/></div>
             </c:if>
 
-            <form action="<c:url value="/user-edit" />" id="personalInfoChangeForm" method="post" accept-charset="UTF-8">
+            <form action="<c:url value="/app/user-edit" />" id="personalInfoChangeForm" method="post" accept-charset="UTF-8">
 
                 <div class="form-group">
                     <fmt:message key="admin.users.username"
@@ -103,7 +103,7 @@
                                                                           bundle="${ rb }"/></div>
             </c:if>
 
-            <form method="post" action="<c:url value="/change-password" />" id="changePasswordForm" accept-charset="UTF-8">
+            <form method="post" action="<c:url value="/app/change-password" />" id="changePasswordForm" accept-charset="UTF-8">
                 <div class="form-group">
                     <fmt:message key="password.old"
                                  bundle="${ rb }"/> <input type="password"

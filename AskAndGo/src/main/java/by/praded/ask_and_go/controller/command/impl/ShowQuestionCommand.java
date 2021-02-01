@@ -47,7 +47,6 @@ public class ShowQuestionCommand implements Command {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "error-page.not-found");
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
-
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "error-page.server");
         }
     }

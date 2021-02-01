@@ -5,14 +5,14 @@
 <fmt:setBundle basename="property.text" var="rb"/>
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="<c:url value="/main"/>">Ask&Go</a>
+        <a class="navbar-brand" href="<c:url value="/app/main"/>">Ask&Go</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="<c:url value="/categories"/>"><fmt:message key="navbar.categories"
+                    <a class="nav-link" href="<c:url value="/app/categories"/>"><fmt:message key="navbar.categories"
                                                                                          bundle="${ rb }"/></a>
                 </li>
 
@@ -22,13 +22,13 @@
                 </li>
                 <c:if test="${not empty sessionScope.auth_user}">
                     <li class="nav-item">
-                        <a class="nav-link" href="<c:url value="/ask"/>"><fmt:message key="question.ask"
+                        <a class="nav-link" href="<c:url value="/app/ask"/>"><fmt:message key="question.ask"
                                                                                       bundle="${ rb }"/></a>
                     </li>
                 </c:if>
                 <c:if test="${sessionScope.auth_user.role.name() eq 'ADMIN'}">
                     <li class="nav-item">
-                        <a class="nav-link" href="<c:url value="/admin"/>"><fmt:message key="navbar.admin"
+                        <a class="nav-link" href="<c:url value="/app/admin"/>"><fmt:message key="navbar.admin"
                                                                                         bundle="${ rb }"/></a>
                     </li>
                 </c:if>
@@ -42,7 +42,7 @@
                 </button>
 
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <form action="<c:url value="/lang" />" method="post" accept-charset="UTF-8">
+                    <form action="<c:url value="/app/lang" />" method="post" accept-charset="UTF-8">
                         <li>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="lang" id="flexRadioDefault1"
@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-            <form class="form-inline" accept-charset="UTF-8" action="<c:url value="/search" />">
+            <form class="form-inline" accept-charset="UTF-8" action="<c:url value="/app/search" />">
                 <input class="form-control mr-sm-2" type="text" name="q" placeholder="<fmt:message key="navbar.search"
                                                                                             bundle="${ rb }"/>"
                        aria-label="Search">
@@ -88,11 +88,11 @@
             <div class="navbar-text mr-3 ml-3">
                 <c:choose>
                     <c:when test="${not empty sessionScope.auth_user}">
-                        <a href="<c:url value="/user?user_id=${sessionScope.auth_user.id}"/>">${sessionScope.auth_user.username}</a>
-                        <a href="<c:url value="/logout"/>"><fmt:message key="navbar.logout" bundle="${ rb }"/></a>
+                        <a href="<c:url value="/app/user?user_id=${sessionScope.auth_user.id}"/>">${sessionScope.auth_user.username}</a>
+                        <a href="<c:url value="/app/logout"/>"><fmt:message key="navbar.logout" bundle="${ rb }"/></a>
                     </c:when>
                     <c:otherwise>
-                        <div><a href="<c:url value="/login"/>"><fmt:message key="navbar.login" bundle="${ rb }"/></a>
+                        <div><a href="<c:url value="/app/login"/>"><fmt:message key="navbar.login" bundle="${ rb }"/></a>
                         </div>
 
                     </c:otherwise>

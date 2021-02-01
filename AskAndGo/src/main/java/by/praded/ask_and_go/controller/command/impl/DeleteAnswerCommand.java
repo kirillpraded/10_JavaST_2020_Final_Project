@@ -43,13 +43,15 @@ public class DeleteAnswerCommand implements Command {
             logger.info(String.format("Answer[%s] deleted.", answerId));
 
             response.sendRedirect(request.getContextPath()
-                    + "/question?question_id="
-                    + request.getParameter(Attribute.QUESTION_ID));
+                    + "/app/question?question_id="
+                    + request.getParameter(Attribute.QUESTION_ID)
+                    + "&page="
+                    + request.getParameter(Attribute.PAGE));
 
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
             request.setAttribute(Attribute.MESSAGE, "database.error");
-            request.getRequestDispatcher("/question").forward(request, response);
+            request.getRequestDispatcher("/app/question").forward(request, response);
         }
     }
 }

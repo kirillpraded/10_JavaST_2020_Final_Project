@@ -21,14 +21,16 @@
 <jsp:include page="parts/navbar.jsp"/>
 <div class="container col-md-8 col-md-offset-3" style="overflow: auto">
 
-    <h1>Answer Edit Form</h1>
+    <h1><fmt:message key="edit.answer"
+                                bundle="${ rb }"/></h1>
     <div class="form-group mt-3">
         <c:if test="${not empty requestScope.message}">
 
         </c:if>
-        <form action="<c:url value="/edit-answer" />" id="addAnswerForm" method="post" accept-charset="UTF-8">
+        <form action="<c:url value="/app/edit-answer" />" id="addAnswerForm" method="post" accept-charset="UTF-8">
             <div class="form-group">
-                Text
+                <fmt:message key="text"
+                             bundle="${ rb }"/>
                 <textarea class="form-control <c:if test="${not empty requestScope.message}">is-invalid</c:if>" rows="12" name="text" id="text"
                           aria-label="With textarea" required>${requestScope.answer.text}</textarea>
                 <c:choose>

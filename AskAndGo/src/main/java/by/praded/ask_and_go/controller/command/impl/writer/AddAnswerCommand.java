@@ -54,7 +54,7 @@ public class AddAnswerCommand implements Command {
             answerService.addAnswer(answer);
             logger.info(String.format("Answer to the question %d successfully added", questionId));
             response.sendRedirect(request.getContextPath()
-                    + "/question?question_id="
+                    + "/app/question?question_id="
                     + questionId
                     + "&page="
                     + request.getParameter(Attribute.PAGE));
@@ -63,11 +63,11 @@ public class AddAnswerCommand implements Command {
             logger.error("It's impossible to process request", e);
             request.setAttribute(Attribute.CONNECTION_ERROR_MESSAGE, "database.error");
             request.setAttribute(Attribute.ANSWER_TEXT, answerText);
-            request.getRequestDispatcher("/question").forward(request, response);
+            request.getRequestDispatcher("/app/question").forward(request, response);
         } catch (ValidationException e) {
             e.getAttributes().forEach(request::setAttribute);
             request.setAttribute(Attribute.ANSWER_TEXT, answerText);
-            request.getRequestDispatcher("/question").forward(request, response);
+            request.getRequestDispatcher("/app/question").forward(request, response);
             logger.debug("Answer validation error.");
         }
     }

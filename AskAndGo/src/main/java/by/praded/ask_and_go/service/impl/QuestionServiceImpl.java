@@ -1,6 +1,12 @@
 package by.praded.ask_and_go.service.impl;
 
-import by.praded.ask_and_go.dao.*;
+import by.praded.ask_and_go.dao.AnswerDao;
+import by.praded.ask_and_go.dao.AvailableDao;
+import by.praded.ask_and_go.dao.QuestionDao;
+import by.praded.ask_and_go.dao.Transaction;
+import by.praded.ask_and_go.dao.TagDao;
+import by.praded.ask_and_go.dao.UserDao;
+import by.praded.ask_and_go.dao.CategoryDao;
 import by.praded.ask_and_go.dao.exception.ConnectionPoolException;
 import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.dao.sql.TransactionFactory;

@@ -56,7 +56,7 @@ public class PersonalInfoEditCommand implements Command {
             authUser.setLastName(lastName);
             authUser.setFirstName(firstName);
             authUser.setEmail(email);
-            response.sendRedirect(request.getContextPath() + "/user?user_id=" + user.getId());
+            response.sendRedirect(request.getContextPath() + "/app/user?user_id=" + user.getId());
         } catch (ConnectionPoolException | DaoException e) {
             logger.error("It's impossible to process request", e);
             request.setAttribute(Attribute.USER, user);

@@ -26,7 +26,7 @@
         </c:if>
         <span class="form-group" style='font-size:100px;'>&#9749;</span>
 
-        <form action="<c:url value="/login" />" method="post" accept-charset="UTF-8">
+        <form action="<c:url value="/app/login" />" method="post" accept-charset="UTF-8">
 
             <div class="form-group">
                 <fmt:message key="admin.users.username"
@@ -55,7 +55,7 @@
             <div>
                 <button type="submit" class="btn btn-primary"><fmt:message key="navbar.login"
                                                                            bundle="${ rb }"/></button>
-                <a href="<c:url value="/registration"/>"><fmt:message key="login.create"
+                <a href="<c:url value="/app/registration"/>"><fmt:message key="login.create"
                                                                       bundle="${ rb }"/></a>
             </div>
         </form>

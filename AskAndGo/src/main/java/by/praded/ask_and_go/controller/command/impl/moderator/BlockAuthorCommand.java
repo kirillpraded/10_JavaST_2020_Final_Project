@@ -45,7 +45,7 @@ public class BlockAuthorCommand implements Command {
             userService.updateUserRole(user);
             logger.info(String.format("User[%d] successfully blocked.", user.getId()));
             response.sendRedirect(request.getContextPath()
-                    + "/question?question_id="
+                    + "/app/question?question_id="
                     + request.getParameter(Attribute.QUESTION_ID)
                     + "&page="
                     + request.getParameter(Attribute.PAGE));

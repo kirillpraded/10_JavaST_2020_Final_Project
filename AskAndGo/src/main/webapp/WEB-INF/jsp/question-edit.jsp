@@ -26,7 +26,7 @@
         <c:if test="${not empty requestScope.message}">
             <div class="alert alert-danger" role="alert">${requestScope.message}</div>
         </c:if>
-        <form action="<c:url value="/edit-question" />" id="questionEditForm" method="post" accept-charset="UTF-8">
+        <form action="<c:url value="/app/edit-question" />" id="questionEditForm" method="post" accept-charset="UTF-8">
             <div class="form-group">
                 <fmt:message key="title"
                              bundle="${ rb }"/> <input type="text"

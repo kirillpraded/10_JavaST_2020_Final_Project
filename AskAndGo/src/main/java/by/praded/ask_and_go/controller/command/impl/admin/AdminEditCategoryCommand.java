@@ -70,7 +70,7 @@ public class AdminEditCategoryCommand implements Command {
         } catch (ValidationException e) {
             e.getAttributes().forEach(request::setAttribute);
         }
-        request.getRequestDispatcher("/admin").forward(request, response);
+        request.getRequestDispatcher("/app/admin").forward(request, response);
     }
 
 

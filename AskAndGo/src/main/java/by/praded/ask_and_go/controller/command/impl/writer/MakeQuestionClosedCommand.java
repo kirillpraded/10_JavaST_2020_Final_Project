@@ -40,7 +40,7 @@ public class MakeQuestionClosedCommand implements Command {
             questionService.updateQuestionIsClosed(questionIdLong);
             logger.info(String.format("Question[%s] is closed.", questionId));
             response.sendRedirect(request.getContextPath()
-                    + "/question?question_id="
+                    + "/app/question?question_id="
                     + questionId + "&page="
                     + request.getParameter(Attribute.PAGE));
         } catch (ConnectionPoolException | DaoException e) {
