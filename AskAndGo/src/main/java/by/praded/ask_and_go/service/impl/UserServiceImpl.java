@@ -50,12 +50,12 @@ public class UserServiceImpl implements UserService {
             transaction = new TransactionImpl(true);
 
             UserDao dao = transaction.createDao(AvailableDao.USER);
-            Optional<User> user = Optional.ofNullable(dao.findByUsername(username));
-            if (user.isPresent() && BCrypt.checkpw(password, user.get().getPassword())) {
-                user.get().setPassword("");
-                return user.get();
+            User user = dao.findByUsername(username).orElseThrow(BadCredentialsException::new);
+            if (BCrypt.checkpw(password, user.getPassword())) {
+                user.setPassword("");
+                return user;
             }
-            //если пара логин\пароль-невалидная
+
             throw new BadCredentialsException();
         } finally {
             if (transaction != null) {
@@ -313,8 +313,8 @@ public class UserServiceImpl implements UserService {
             transaction = TransactionFactory.getInstance().createTransaction(true);
             UserDao dao = transaction.createDao(AvailableDao.USER);
 
-            Optional<User> optionalUser = Optional.ofNullable(dao.findByUsername(user.getUsername()));
-            if (optionalUser.isPresent() && BCrypt.checkpw(user.getPassword(), optionalUser.get().getPassword())) {
+            User userFound = dao.findByUsername(user.getUsername()).orElseThrow(BadCredentialsException::new);
+            if (BCrypt.checkpw(user.getPassword(), userFound.getPassword())) {
                 //если логин и пароль - ок
                 user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
                 dao.updatePassword(user);

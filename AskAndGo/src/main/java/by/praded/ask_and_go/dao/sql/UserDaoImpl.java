@@ -13,6 +13,7 @@ import java.sql.Statement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Kiryl Praded
@@ -43,7 +44,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      * @throws DaoException - exception may occurs during the reading.
      */
     @Override
-    public User findByUsernameAndPassword(String username, String password) throws DaoException {
+    public Optional<User> findByUsernameAndPassword(String username, String password) throws DaoException {
         String sql = "SELECT `id`, `first_name`, `last_name`, `email`, `role`, `reg_date` FROM `user` " +
                 "WHERE `username` = ? AND `password` = ?";
         User user = null;
@@ -66,7 +67,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return user;
+        return Optional.ofNullable(user);
     }
 
     /**
@@ -77,7 +78,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      * @throws DaoException - exception may occurs during the reading.
      */
     @Override
-    public User findByUsername(String username) throws DaoException {
+    public Optional<User> findByUsername(String username) throws DaoException {
         String sql = "SELECT `id`,`username`, `password`, `first_name`, `last_name`, `email`, `role`, `reg_date`, `profile_image`" +
                 " FROM `user` WHERE `username` = ?";
         User user = null;
@@ -100,7 +101,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return user;
+        return Optional.ofNullable(user);
     }
 
     /**

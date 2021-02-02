@@ -4,6 +4,7 @@ import by.praded.ask_and_go.dao.exception.DaoException;
 import by.praded.ask_and_go.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Kiryl Praded
@@ -19,19 +20,19 @@ public interface UserDao extends Dao<User> {
      *
      * @param login    - username
      * @param password - user's password
-     * @return user, found by username and password.
+     * @return optional of user, found by username and password.
      * @throws DaoException - exception may occurs during the reading.
      */
-    User findByUsernameAndPassword(String login, String password) throws DaoException;
+    Optional<User> findByUsernameAndPassword(String login, String password) throws DaoException;
 
     /**
      * Declaration of the method to find user by username.
      *
      * @param username - username to search by.
-     * @return user. found by username.
+     * @return optional of user. found by username.
      * @throws DaoException - exception may occurs during the reading.
      */
-    User findByUsername(String username) throws DaoException;
+    Optional<User> findByUsername(String username) throws DaoException;
 
     /**
      * Declaration of the method to find all users.
