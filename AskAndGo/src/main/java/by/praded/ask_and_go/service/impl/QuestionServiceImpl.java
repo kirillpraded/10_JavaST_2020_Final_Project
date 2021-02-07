@@ -99,7 +99,7 @@ public class QuestionServiceImpl implements QuestionService {
 
             UserDao userDao = transaction.createDao(AvailableDao.USER);
             for (Question question : questions) {
-                question.setAuthor(userDao.read(question.getId()));
+                question.setAuthor(userDao.read(question.getAuthor().getId()));
             }
 
             return questions;
